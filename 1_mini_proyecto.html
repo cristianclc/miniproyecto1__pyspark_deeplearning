@@ -1,0 +1,2076 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Análisis Predictivo - Click-Through Rate &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '1_mini_proyecto';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modelado Scikit-Learn - Click-Through Rate" href="2_mini_modelado_sklearn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Análisis Predictivo - Click-Through Rate
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2_mini_modelado_sklearn.html"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_mini_modelado_pyspark.html"><strong>Modelado Pyspark - Click-Through Rate</strong></a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2F1_mini_proyecto.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/1_mini_proyecto.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Análisis Predictivo - Click-Through Rate</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-del-proyecto"><strong>Contexto del Proyecto</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-de-datos-click-through-rate-prediction"><strong>Base de Datos: Click-Through Rate Prediction</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#origen"><strong>Origen</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas"><strong>Características</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-analizadas"><strong>Variables analizadas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo"><strong>Variable Objetivo</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias-analisis-exploratorio"><strong>Importación de Librerías - Análisis exploratorio</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-de-datos"><strong>Lectura de Datos</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cambio-nombre-de-columnas"><strong>Cambio nombre de columnas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-dataframe"><strong>Tamaño Dataframe</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-faltantes"><strong>Datos faltantes</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-a-tipo-de-dato-fecha"><strong>Conversión a tipo de dato fecha</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extraccion-variables-temporales"><strong>Extracción variables temporales</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encabezado-dataframe"><strong>Encabezado Dataframe</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-de-datos-y-cardinalidad"><strong>Tipos de Datos y cardinalidad</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eliminar-variables-identificadoras"><strong>Eliminar variables identificadoras</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verificamos-cardinalidad-y-cambios-realizados-en-el-dataframe"><strong>Verificamos cardinalidad y cambios realizados en el Dataframe</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-univariado"><strong>Análisis univariado</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuciones-variables-anonimizadas"><strong>Distribuciones variables anonimizadas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proporcion-de-cada-categoria"><strong>Proporción de cada categoría</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-correlacion-variables-anonimas"><strong>Matriz de correlación - Variables anónimas</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-variables-categoricas"><strong>Distribución variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuciones-variables-temporales"><strong>Distribuciones variables temporales</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-variable-objetivo"><strong>Distribución variable Objetivo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-bivariado"><strong>Análisis Bivariado</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-click-con-respecto-a-hora"><strong>Distribución click con respecto a hora</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tasa-de-clicks-por-hora"><strong>Tasa de clicks por hora</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-variable-click-con-variables-anonimas"><strong>Relación variable click, con variables anónimas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-variables-categoricas-con-variable-click"><strong>Relación variables categóricas con variable click</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#guardado-del-dataframe-para-uso-en-sklearn"><strong>Guardado del Dataframe para uso en Sklearn</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones"><strong>Conclusiones</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelado"><strong>Modelado</strong></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-predictivo-click-through-rate">
+<h1><strong>Análisis Predictivo - Click-Through Rate</strong><a class="headerlink" href="#analisis-predictivo-click-through-rate" title="Link to this heading">#</a></h1>
+<section id="contexto-del-proyecto">
+<h2><strong>Contexto del Proyecto</strong><a class="headerlink" href="#contexto-del-proyecto" title="Link to this heading">#</a></h2>
+<p>El objetivo del proyecto es el de construir un modelo de clasificación supervisada usando MLP - (MultiLayer Perceptron) con el fin de predecir si un usuario hará clic en un anuncio móvil</p>
+</section>
+<section id="base-de-datos-click-through-rate-prediction">
+<h2><strong>Base de Datos: Click-Through Rate Prediction</strong><a class="headerlink" href="#base-de-datos-click-through-rate-prediction" title="Link to this heading">#</a></h2>
+<section id="origen">
+<h3><strong>Origen</strong><a class="headerlink" href="#origen" title="Link to this heading">#</a></h3>
+<p>El Dataset utilizado en este proyecto corresponde a <strong>Click-Through Rate Prediction</strong>, usado inicialmente en competencias de Kaggle con el fin de evaluar algoritmos para la predicción de clicks en publicidad digital.</p>
+</section>
+<section id="caracteristicas">
+<h3><strong>Características</strong><a class="headerlink" href="#caracteristicas" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Volumen:</strong> 40,428,967 registros de usuarios.</p></li>
+<li><p><strong>Variables:</strong> 24 variables.</p></li>
+<li><p><strong>Período:</strong> 11 días de información.</p></li>
+<li><p><strong>Completitud:</strong> No contamos con valores faltantes en el Dataset.</p></li>
+</ul>
+</section>
+</section>
+<section id="variables-analizadas">
+<h2><strong>Variables analizadas</strong><a class="headerlink" href="#variables-analizadas" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code>: Identificador único de cada impresión de anuncio. Cada fila del dataset representa una ocasión en la que un anuncio fue mostrado a un usuario.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hour</span></code>: Marca temporal del anuncio (formato: YYMMDDHH)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">banner_pos</span></code>: Posición del banner en la página web.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_id</span></code>: Identificador único del sitio web donde se mostró el anuncio.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_domain</span></code>: Dominio del sitio web donde se muestra el anuncio.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_category</span></code>: Categoría temática del sitio web.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_id</span></code>: Identificador único de la aplicación móvil donde se mostró el anuncio.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_domain</span></code>: Dominio asociado a la aplicación.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_category</span></code>: Categoría de la aplicación.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_id</span></code>: Identificador único del dispositivo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_ip</span></code>: Dirección IP del dispositivo que vio el anuncio.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_model</span></code>: Modelo del dispositivo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_type</span></code>: Tipo de dispositivo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_conn_type</span></code>: Tipo de conexión de red del dispositivo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C1</span></code>: variable categórica anonimizada</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C14–C21</span></code>: variables categóricas anónimas</p></li>
+</ul>
+<section id="variable-objetivo">
+<h3><strong>Variable Objetivo</strong><a class="headerlink" href="#variable-objetivo" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">click</span></code>:  indicador de si hubo clic</p></li>
+</ul>
+</section>
+</section>
+<section id="importacion-de-librerias-analisis-exploratorio">
+<h2><strong>Importación de Librerías - Análisis exploratorio</strong><a class="headerlink" href="#importacion-de-librerias-analisis-exploratorio" title="Link to this heading">#</a></h2>
+<p>Se importan las librerías necesarias para el análisis que abarca la carga de datos, visualización y la transformación de datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="lectura-de-datos">
+<h2><strong>Lectura de Datos</strong><a class="headerlink" href="#lectura-de-datos" title="Link to this heading">#</a></h2>
+<p>Para dar inicio al análisis, se procede a realizar la carga del conjunto de datos principal, el cual contiene información correspondiente a 40 millones de registros de clics en anuncios publicitarios. Posteriormente, con el objetivo de optimizar el proceso de exploración, se extrajo un subconjunto de los datos originales. Este subconjunto se utilizará como base para desarrollar el análisis exploratorio y modelado en Scikit-Learn.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="sa">r</span><span class="s1">&#39;datos\train\train_sklearn.csv&#39;</span><span class="p">))</span>
+
+<span class="k">except</span><span class="p">:</span>
+    
+    <span class="n">df_entero</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="sa">r</span><span class="s1">&#39;datos\train\train.csv&#39;</span><span class="p">))</span> 
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df_entero</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="sa">r</span><span class="s1">&#39;datos\train\train_sklearn.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="cambio-nombre-de-columnas">
+<h3><strong>Cambio nombre de columnas</strong><a class="headerlink" href="#cambio-nombre-de-columnas" title="Link to this heading">#</a></h3>
+<p>Como parte del proceso de preparación de los datos, se procedió a modificar el nombre de las columnas del conjunto de datos, con el objetivo principal de estandarizar los nombres de las variables.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;id&#39;, &#39;click&#39;, &#39;hour&#39;, &#39;c1&#39;, &#39;banner_pos&#39;, &#39;site_id&#39;, &#39;site_domain&#39;,
+       &#39;site_category&#39;, &#39;app_id&#39;, &#39;app_domain&#39;, &#39;app_category&#39;, &#39;device_id&#39;,
+       &#39;device_ip&#39;, &#39;device_model&#39;, &#39;device_type&#39;, &#39;device_conn_type&#39;, &#39;c14&#39;,
+       &#39;c15&#39;, &#39;c16&#39;, &#39;c17&#39;, &#39;c18&#39;, &#39;c19&#39;, &#39;c20&#39;, &#39;c21&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="tamano-dataframe">
+<h3><strong>Tamaño Dataframe</strong><a class="headerlink" href="#tamano-dataframe" title="Link to this heading">#</a></h3>
+<p>Evaluamos la estructura y calidad inicial del dataset, observando número de filas y variables para el estudio del Dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1000000, 24)
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Dimensiones del subsample</strong>: Con 1,000,000 de registros y 24 variables, el subconjunto del dataset resulta representativo y manejable para llevar a cabo un análisis exploratorio robusto, permitiendo así, obtener conclusiones significativas del dataset original.</p>
+</section>
+<section id="datos-faltantes">
+<h3><strong>Datos faltantes</strong><a class="headerlink" href="#datos-faltantes" title="Link to this heading">#</a></h3>
+<p>Procedemos a identificar y cuantificar la presencia de valores ausentes en cada una de las variables.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id                  0
+click               0
+hour                0
+c1                  0
+banner_pos          0
+site_id             0
+site_domain         0
+site_category       0
+app_id              0
+app_domain          0
+app_category        0
+device_id           0
+device_ip           0
+device_model        0
+device_type         0
+device_conn_type    0
+c14                 0
+c15                 0
+c16                 0
+c17                 0
+c18                 0
+c19                 0
+c20                 0
+c21                 0
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Observamos que el subsample del Dataset no cuenta con valores faltantes en ninguna de sus variables.</p>
+</section>
+<section id="conversion-a-tipo-de-dato-fecha">
+<h3><strong>Conversión a tipo de dato fecha</strong><a class="headerlink" href="#conversion-a-tipo-de-dato-fecha" title="Link to this heading">#</a></h3>
+<p>Se identificó la variable <code class="docutils literal notranslate"><span class="pre">hour</span></code>, la cual contaba con información temporal y que requería ser convertida al tipo de dato fecha.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%y%m</span><span class="si">%d</span><span class="s1">%H&#39;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;&lt;M8[ns]&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="extraccion-variables-temporales">
+<h3><strong>Extracción variables temporales</strong><a class="headerlink" href="#extraccion-variables-temporales" title="Link to this heading">#</a></h3>
+<p>Posteriormente, extraemos variables temporales específicas con el fin de analizar los datos con mayor detalle, para esto, creamos 4 nuevas variables que corresponden a: <code class="docutils literal notranslate"><span class="pre">dia</span></code>, <code class="docutils literal notranslate"><span class="pre">mes</span></code>, <code class="docutils literal notranslate"><span class="pre">año</span></code>, <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;año&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;mes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;dia&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;datetime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">hour</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="encabezado-dataframe">
+<h3><strong>Encabezado Dataframe</strong><a class="headerlink" href="#encabezado-dataframe" title="Link to this heading">#</a></h3>
+<p>Observamos el encabezado del Dataframe con el fin de evaluar y visualizar los cambios realizados hasta ahora.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>             id  click  hour    c1  banner_pos   site_id site_domain site_category    app_id app_domain app_category device_id device_ip device_model  device_type  device_conn_type    c14  c15  c16   c17  c18   c19     c20  c21            datetime   año  mes  dia
+0  1.219830e+19      0    19  1005           0  85f751fd    c4e18dd6      50e219e0  98fed791   d9b5648e     0f2161f8  a99f214a  fc723bb6     72a00661            1                 0  20277  320   50  2281    3    47  100182   42 2014-10-23 19:00:00  2014   10   23
+1  6.333857e+18      0    13  1005           0  1fbe01fe    f3845767      28905ebd  ecad2386   7801e8d9     07d7df22  a99f214a  fc61627b     3bd9e8e7            1                 0  15705  320   50  1722    0    35      -1   79 2014-10-24 13:00:00  2014   10   24
+2  1.297881e+19      0     5  1005           0  1fbe01fe    f3845767      28905ebd  ecad2386   7801e8d9     07d7df22  a99f214a  c646d2c8     1f0bc64f            1                 0  20108  320   50  2299    2  1327  100084   52 2014-10-28 05:00:00  2014   10   28
+3  6.644525e+18      0    11  1005           0  85f751fd    c4e18dd6      50e219e0  1a32e234   2347f47a     0f2161f8  18991006  440979d3     421872ab            1                 0  20170  300   50  2312    0   167  100079   16 2014-10-29 11:00:00  2014   10   29
+4  4.572864e+18      0    20  1005           0  85f751fd    c4e18dd6      50e219e0  3e2bf98d   2347f47a     0f2161f8  afeffc18  be9a7b07     8e39e528            1                 2  22955  320   50  2655    2    38      -1   23 2014-10-28 20:00:00  2014   10   28
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="tipos-de-datos-y-cardinalidad">
+<h3><strong>Tipos de Datos y cardinalidad</strong><a class="headerlink" href="#tipos-de-datos-y-cardinalidad" title="Link to this heading">#</a></h3>
+<p>Revisamos la estructura del dataset para entender qué tipo de información contiene cada vriable y cómo se distribuyen los valores dentro de ellas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;tipo dato&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span>
+    <span class="s2">&quot;valores únicos&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="n">summary_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;valores únicos&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>tipo dato</th>
+      <th>valores únicos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>id</th>
+      <td>float64</td>
+      <td>1000000</td>
+    </tr>
+    <tr>
+      <th>device_ip</th>
+      <td>object</td>
+      <td>555175</td>
+    </tr>
+    <tr>
+      <th>device_id</th>
+      <td>object</td>
+      <td>150215</td>
+    </tr>
+    <tr>
+      <th>device_model</th>
+      <td>object</td>
+      <td>5134</td>
+    </tr>
+    <tr>
+      <th>app_id</th>
+      <td>object</td>
+      <td>3169</td>
+    </tr>
+    <tr>
+      <th>site_domain</th>
+      <td>object</td>
+      <td>2856</td>
+    </tr>
+    <tr>
+      <th>site_id</th>
+      <td>object</td>
+      <td>2665</td>
+    </tr>
+    <tr>
+      <th>c14</th>
+      <td>int64</td>
+      <td>2243</td>
+    </tr>
+    <tr>
+      <th>c17</th>
+      <td>int64</td>
+      <td>422</td>
+    </tr>
+    <tr>
+      <th>datetime</th>
+      <td>datetime64[ns]</td>
+      <td>240</td>
+    </tr>
+    <tr>
+      <th>app_domain</th>
+      <td>object</td>
+      <td>201</td>
+    </tr>
+    <tr>
+      <th>c20</th>
+      <td>int64</td>
+      <td>164</td>
+    </tr>
+    <tr>
+      <th>c19</th>
+      <td>int64</td>
+      <td>67</td>
+    </tr>
+    <tr>
+      <th>c21</th>
+      <td>int64</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>app_category</th>
+      <td>object</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>hour</th>
+      <td>int32</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>site_category</th>
+      <td>object</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>dia</th>
+      <td>int32</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>c16</th>
+      <td>int64</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>c15</th>
+      <td>int64</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>banner_pos</th>
+      <td>int64</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>c1</th>
+      <td>int64</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>device_type</th>
+      <td>int64</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>c18</th>
+      <td>int64</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>device_conn_type</th>
+      <td>int64</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>click</th>
+      <td>int64</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>año</th>
+      <td>int32</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>mes</th>
+      <td>int32</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Observamos que existen variables identificadoras de alta cardinalidad <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">device_ip</span></code>, <code class="docutils literal notranslate"><span class="pre">device_id</span></code>, <code class="docutils literal notranslate"><span class="pre">app_id</span></code>,<code class="docutils literal notranslate"><span class="pre">site_id</span></code></p>
+<p>Las variables anónimas, aunque codificadas como numéricas, corresponden a variables categóricas (códigos/identificadores).</p>
+</section>
+<section id="eliminar-variables-identificadoras">
+<h3><strong>Eliminar variables identificadoras</strong><a class="headerlink" href="#eliminar-variables-identificadoras" title="Link to this heading">#</a></h3>
+<p>Identificamos un conjunto de variables que funcionan principalmente como identificadores únicos o semiúnicos dentro del dataset. Las siguientes variables fueron excluídas del análisis:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code>: Identificador único por registro</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_ip</span></code>: 555175 valores únicos, dada su alta variabilidad no resulta confiable como predictor.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">device_id</span></code>: 150215 valores únicos, identificador con demasiadas categorías y poca consistencia.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_id</span></code>: contamos con app_domain, la cual captura información similar.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_id</span></code>: contamos con site_domain, la cual captura información similar.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datetime</span></code>: variable segmentada en <code class="docutils literal notranslate"><span class="pre">dia</span></code>, <code class="docutils literal notranslate"><span class="pre">mes</span></code>, <code class="docutils literal notranslate"><span class="pre">año</span></code>, <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;device_id&#39;</span><span class="p">,</span><span class="s1">&#39;device_ip&#39;</span><span class="p">,</span><span class="s1">&#39;app_id&#39;</span><span class="p">,</span><span class="s1">&#39;site_id&#39;</span><span class="p">,</span><span class="s1">&#39;datetime&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="verificamos-cardinalidad-y-cambios-realizados-en-el-dataframe">
+<h3><strong>Verificamos cardinalidad y cambios realizados en el Dataframe</strong><a class="headerlink" href="#verificamos-cardinalidad-y-cambios-realizados-en-el-dataframe" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;tipo dato&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">,</span>
+    <span class="s2">&quot;valores únicos&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="n">summary_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;valores únicos&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>tipo dato</th>
+      <th>valores únicos</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>device_model</th>
+      <td>object</td>
+      <td>5134</td>
+    </tr>
+    <tr>
+      <th>site_domain</th>
+      <td>object</td>
+      <td>2856</td>
+    </tr>
+    <tr>
+      <th>c14</th>
+      <td>int64</td>
+      <td>2243</td>
+    </tr>
+    <tr>
+      <th>c17</th>
+      <td>int64</td>
+      <td>422</td>
+    </tr>
+    <tr>
+      <th>app_domain</th>
+      <td>object</td>
+      <td>201</td>
+    </tr>
+    <tr>
+      <th>c20</th>
+      <td>int64</td>
+      <td>164</td>
+    </tr>
+    <tr>
+      <th>c19</th>
+      <td>int64</td>
+      <td>67</td>
+    </tr>
+    <tr>
+      <th>c21</th>
+      <td>int64</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <th>app_category</th>
+      <td>object</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <th>hour</th>
+      <td>int32</td>
+      <td>24</td>
+    </tr>
+    <tr>
+      <th>site_category</th>
+      <td>object</td>
+      <td>22</td>
+    </tr>
+    <tr>
+      <th>dia</th>
+      <td>int32</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>c16</th>
+      <td>int64</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>c15</th>
+      <td>int64</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>banner_pos</th>
+      <td>int64</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>c1</th>
+      <td>int64</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>device_type</th>
+      <td>int64</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>device_conn_type</th>
+      <td>int64</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>c18</th>
+      <td>int64</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>click</th>
+      <td>int64</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>año</th>
+      <td>int32</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>mes</th>
+      <td>int32</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Dada la alta cardinalidad de las variables categóricas restantes, optamos por utilizar <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> (codificación por objetivo) en lugar de <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code>. Esta técnica consiste en reemplazar cada categoría por el valor promedio de la variable objetivo para esa categoría, lo que evita la explosión dimensional que generaría <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code> y que aumentaría significativamente el costo computacional del entrenamiento. Adicionalmente, agruparemos las categorías raras para evitar estimaciones poco robustas de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Enconding</span></code> basadas en pocas observaciones.</p>
+</section>
+</section>
+<section id="analisis-univariado">
+<h2><strong>Análisis univariado</strong><a class="headerlink" href="#analisis-univariado" title="Link to this heading">#</a></h2>
+<p>El Análisis Univariado es la primera fase del análisis exploratorio de datos. Se enfoca en el estudio individual de cada variable para entender su distribución, características y valores atípicos. Esto permite identificar patrones y la calidad de los datos antes de un análisis más complejo.</p>
+<section id="distribuciones-variables-anonimizadas">
+<h3><strong>Distribuciones variables anonimizadas</strong><a class="headerlink" href="#distribuciones-variables-anonimizadas" title="Link to this heading">#</a></h3>
+<p>En primer lugar, centramos el análisis univariado en evaluar el comportamiento de las variables anónimas (<code class="docutils literal notranslate"><span class="pre">c1</span></code>, <code class="docutils literal notranslate"><span class="pre">c14</span></code>, <code class="docutils literal notranslate"><span class="pre">c15</span></code>, <code class="docutils literal notranslate"><span class="pre">c16</span></code>, <code class="docutils literal notranslate"><span class="pre">c17</span></code>, <code class="docutils literal notranslate"><span class="pre">c18</span></code>, <code class="docutils literal notranslate"><span class="pre">c19</span></code>, <code class="docutils literal notranslate"><span class="pre">c20</span></code>, <code class="docutils literal notranslate"><span class="pre">c21</span></code>). Para ello, examinamos sus distribuciones, frecuencias y posibles valores atípicos</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variables_anon</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span><span class="s1">&#39;c14&#39;</span><span class="p">,</span><span class="s1">&#39;c15&#39;</span><span class="p">,</span><span class="s1">&#39;c16&#39;</span><span class="p">,</span><span class="s1">&#39;c17&#39;</span><span class="p">,</span><span class="s1">&#39;c18&#39;</span><span class="p">,</span><span class="s1">&#39;c19&#39;</span><span class="p">,</span><span class="s1">&#39;c20&#39;</span><span class="p">,</span><span class="s1">&#39;c21&#39;</span><span class="p">]</span>
+
+<span class="n">df</span><span class="p">[</span><span class="n">variables_anon</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>c1</th>
+      <th>c14</th>
+      <th>c15</th>
+      <th>c16</th>
+      <th>c17</th>
+      <th>c18</th>
+      <th>c19</th>
+      <th>c20</th>
+      <th>c21</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>1004.969626</td>
+      <td>18843.081865</td>
+      <td>318.845060</td>
+      <td>60.074084</td>
+      <td>2112.820761</td>
+      <td>1.432153</td>
+      <td>227.187716</td>
+      <td>53199.200120</td>
+      <td>83.454754</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>1.096840</td>
+      <td>4957.409610</td>
+      <td>21.215482</td>
+      <td>47.301157</td>
+      <td>609.077867</td>
+      <td>1.327160</td>
+      <td>351.045853</td>
+      <td>49957.876504</td>
+      <td>70.325635</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1001.000000</td>
+      <td>375.000000</td>
+      <td>120.000000</td>
+      <td>20.000000</td>
+      <td>112.000000</td>
+      <td>0.000000</td>
+      <td>33.000000</td>
+      <td>-1.000000</td>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>1005.000000</td>
+      <td>16920.000000</td>
+      <td>320.000000</td>
+      <td>50.000000</td>
+      <td>1863.000000</td>
+      <td>0.000000</td>
+      <td>35.000000</td>
+      <td>-1.000000</td>
+      <td>23.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1005.000000</td>
+      <td>20346.000000</td>
+      <td>320.000000</td>
+      <td>50.000000</td>
+      <td>2323.000000</td>
+      <td>2.000000</td>
+      <td>39.000000</td>
+      <td>100048.000000</td>
+      <td>61.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1005.000000</td>
+      <td>21894.000000</td>
+      <td>320.000000</td>
+      <td>50.000000</td>
+      <td>2526.000000</td>
+      <td>3.000000</td>
+      <td>171.000000</td>
+      <td>100087.000000</td>
+      <td>101.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1012.000000</td>
+      <td>24044.000000</td>
+      <td>1024.000000</td>
+      <td>1024.000000</td>
+      <td>2757.000000</td>
+      <td>3.000000</td>
+      <td>1839.000000</td>
+      <td>100248.000000</td>
+      <td>255.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables_anon</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribución variable anónima - </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/42cfa0c6d77e799658f42f59e45c9c5d816b400973bb82dd8d40db7008eaa025.png" src="_images/42cfa0c6d77e799658f42f59e45c9c5d816b400973bb82dd8d40db7008eaa025.png" />
+<img alt="_images/d895505a8e79716c24217d03f3119c84baa52bd756ca2de68f9e0a23e107e727.png" src="_images/d895505a8e79716c24217d03f3119c84baa52bd756ca2de68f9e0a23e107e727.png" />
+<img alt="_images/8103ecd7909c8e274339340a4135b061440206297da8e551e1e29f3b212cb15c.png" src="_images/8103ecd7909c8e274339340a4135b061440206297da8e551e1e29f3b212cb15c.png" />
+<img alt="_images/c2f7b0e609e194762ef3211292fc9eebf49a17dcc0322736836dd92c3f83cedb.png" src="_images/c2f7b0e609e194762ef3211292fc9eebf49a17dcc0322736836dd92c3f83cedb.png" />
+<img alt="_images/7560184a631e939ff807324d8964655b68d77581a1b98160f8ca20d1b6df7cd6.png" src="_images/7560184a631e939ff807324d8964655b68d77581a1b98160f8ca20d1b6df7cd6.png" />
+<img alt="_images/f53af7e3746303e2b858121e2f31b03c849699fbb2530d3418378ee89d21dfa4.png" src="_images/f53af7e3746303e2b858121e2f31b03c849699fbb2530d3418378ee89d21dfa4.png" />
+<img alt="_images/e6de7dc57f739f5c47098a25ecace51d46f90d6cb54cd443fc40dcca2c129087.png" src="_images/e6de7dc57f739f5c47098a25ecace51d46f90d6cb54cd443fc40dcca2c129087.png" />
+<img alt="_images/ef784596c86d1891fd501bd5640d29078538d1f23fd5a1aa19e2c39a842acc61.png" src="_images/ef784596c86d1891fd501bd5640d29078538d1f23fd5a1aa19e2c39a842acc61.png" />
+<img alt="_images/0cbebce8218f9b7ae462194aac67785d7a5306c02f7f794878f3a405f4560b77.png" src="_images/0cbebce8218f9b7ae462194aac67785d7a5306c02f7f794878f3a405f4560b77.png" />
+</div>
+</div>
+<p>En el caso de las variables <code class="docutils literal notranslate"><span class="pre">c1</span></code>, <code class="docutils literal notranslate"><span class="pre">c15</span></code>, <code class="docutils literal notranslate"><span class="pre">c16</span></code> y <code class="docutils literal notranslate"><span class="pre">c20</span></code>, observamos que la gran mayoría de las instancias se concentran en ciertos valores específicos. Esto sugiere, al menos para estas variables, un comportamiento típico de código o categorías predefinidas.</p>
+<p>Por otro lado, variables como <code class="docutils literal notranslate"><span class="pre">c14</span></code>, <code class="docutils literal notranslate"><span class="pre">c17</span></code>, <code class="docutils literal notranslate"><span class="pre">c19</span></code>, <code class="docutils literal notranslate"><span class="pre">c21</span></code> cuentan con rangos de valores más dispersos. Las variables <code class="docutils literal notranslate"><span class="pre">c14</span></code> y <code class="docutils literal notranslate"><span class="pre">c17</span></code>, parecen tener distribuciones similares.</p>
+<p>La variable <code class="docutils literal notranslate"><span class="pre">c18</span></code>, cuenta con 4 valores únicos.</p>
+</section>
+<section id="proporcion-de-cada-categoria">
+<h3><strong>Proporción de cada categoría</strong><a class="headerlink" href="#proporcion-de-cada-categoria" title="Link to this heading">#</a></h3>
+<p>De forma complementaria, calculamos la proporción de cada categoría en las variables anónimas. Esto nos permite identificar qué tan distribuidas están las categorías y qué valores que concentran la mayor parte de las observaciones. Como parte del modelado en Scikit-Learn, agruparemos categorías con menos de un 1% de observaciones en la categoría <code class="docutils literal notranslate"><span class="pre">'OTHER'</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables_anon</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Proporción valores únicos en </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Proporción valores únicos en c1 7
+c1
+1005    0.918742
+1002    0.054695
+1010    0.022424
+1012    0.002913
+1007    0.000854
+1001    0.000232
+1008    0.000140
+Name: proportion, dtype: float64
+Proporción valores únicos en c14 2243
+c14
+4687     0.023452
+21611    0.022674
+21189    0.018759
+21191    0.018611
+19771    0.018165
+           ...   
+22486    0.000001
+23515    0.000001
+18591    0.000001
+12008    0.000001
+12210    0.000001
+Name: proportion, Length: 2243, dtype: float64
+Proporción valores únicos en c15 8
+c15
+320     0.932837
+300     0.057519
+216     0.007641
+728     0.001771
+1024    0.000080
+120     0.000066
+480     0.000049
+768     0.000037
+Name: proportion, dtype: float64
+Proporción valores únicos en c16 9
+c16
+50      0.943276
+250     0.044517
+36      0.007641
+480     0.002563
+90      0.001771
+768     0.000080
+20      0.000066
+320     0.000049
+1024    0.000037
+Name: proportion, dtype: float64
+Proporción valores únicos en c17 422
+c17
+1722    0.111877
+2424    0.037370
+2227    0.036619
+1800    0.029578
+423     0.023452
+          ...   
+2448    0.000001
+2521    0.000001
+2447    0.000001
+2585    0.000001
+2651    0.000001
+Name: proportion, Length: 422, dtype: float64
+Proporción valores únicos en c18 4
+c18
+0    0.419669
+3    0.338308
+2    0.175206
+1    0.066817
+Name: proportion, dtype: float64
+Proporción valores únicos en c19 67
+c19
+35      0.301461
+39      0.217894
+167     0.078089
+161     0.038870
+47      0.036160
+          ...   
+683     0.000017
+545     0.000007
+677     0.000002
+1447    0.000001
+1195    0.000001
+Name: proportion, Length: 67, dtype: float64
+Proporción valores únicos en c20 164
+c20
+-1         0.468600
+ 100084    0.060357
+ 100148    0.044311
+ 100111    0.042810
+ 100077    0.039066
+             ...   
+ 100138    0.000002
+ 100100    0.000002
+ 100078    0.000002
+ 100246    0.000001
+ 100157    0.000001
+Name: proportion, Length: 164, dtype: float64
+Proporción valores únicos en c21 60
+c21
+23     0.219969
+221    0.125153
+79     0.114398
+48     0.053653
+71     0.051714
+61     0.051097
+157    0.045986
+32     0.043900
+33     0.037120
+52     0.029280
+42     0.025241
+51     0.021153
+15     0.019035
+212    0.016248
+43     0.014472
+117    0.010375
+229    0.010075
+13     0.009549
+16     0.008552
+156    0.008473
+68     0.008017
+159    0.007333
+95     0.006802
+46     0.005763
+246    0.005050
+69     0.004416
+91     0.004316
+17     0.004054
+76     0.003433
+111    0.003418
+70     0.003208
+90     0.003173
+110    0.003026
+171    0.002828
+204    0.002302
+101    0.002034
+253    0.001937
+112    0.001822
+82     0.001686
+100    0.001608
+182    0.001225
+178    0.001207
+35     0.001140
+108    0.001110
+94     0.000547
+251    0.000518
+116    0.000377
+194    0.000362
+93     0.000306
+20     0.000299
+102    0.000212
+104    0.000208
+163    0.000178
+126    0.000176
+177    0.000151
+255    0.000097
+195    0.000092
+1      0.000067
+219    0.000041
+85     0.000018
+Name: proportion, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="matriz-de-correlacion-variables-anonimas">
+<h3><strong>Matriz de correlación - Variables anónimas</strong><a class="headerlink" href="#matriz-de-correlacion-variables-anonimas" title="Link to this heading">#</a></h3>
+<p>Para profundizar en el análisis de las variables anónimas, construimos una matriz de correlación que nos permita examinar las relaciones lineales entre ellas. Además de su relación con nuestra variable objetivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">variables_anon</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+
+
+<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">diverging_palette</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">as_cmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;shrink&quot;</span><span class="p">:</span> <span class="mf">.5</span><span class="p">},</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="_images/4fff603184abc6672997ffff66b4672b95581062a2a22a11c2610ee0599f0bfa.png" src="_images/4fff603184abc6672997ffff66b4672b95581062a2a22a11c2610ee0599f0bfa.png" />
+</div>
+</div>
+<p>Con relación a los valores observados en la matriz de correlación. En primer lugar, observamos una baja correlación entre las variables anónimas y la variable objetivo click, lo que confirma que estas variables se comportan más como identificadores o códigos.</p>
+<p>Correlaciones valiosas entre variables:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">c14</span> <span class="pre">vs</span> <span class="pre">c17</span></code> | 0.98: Presentan una correlación muy alta de 0.98, redundancia entre ambas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c14</span> <span class="pre">vs</span> <span class="pre">c21</span></code> | 0.41: Correlación moderada positiva</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c17</span> <span class="pre">vs</span> <span class="pre">c21</span></code> | 0.42: Mismo comportamiento observado en c14 vs c21</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c18</span> <span class="pre">vs</span> <span class="pre">c21</span></code> | -0.55: Destaca una correlación negativa moderada de -0.55, lo que señala una relación inversa</p></li>
+</ul>
+</section>
+</section>
+<section id="distribucion-variables-categoricas">
+<h2><strong>Distribución variables categóricas</strong><a class="headerlink" href="#distribucion-variables-categoricas" title="Link to this heading">#</a></h2>
+<p>Procedemos a analizar la distribución de las variables categóricas presentes en el dataset, evaluando proprciones en valores únicos y concentraciones.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_cat</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;device_model&#39;</span><span class="p">,</span> <span class="s1">&#39;site_domain&#39;</span><span class="p">,</span> <span class="s1">&#39;app_domain&#39;</span><span class="p">,</span> <span class="s1">&#39;app_category&#39;</span><span class="p">,</span><span class="s1">&#39;site_category&#39;</span><span class="p">,</span><span class="s1">&#39;banner_pos&#39;</span><span class="p">,</span><span class="s1">&#39;device_type&#39;</span><span class="p">,</span><span class="s1">&#39;device_conn_type&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_cat</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Proporción valores únicos en </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unique counts of site_category 5134
+device_model
+8a4875bd    0.060749
+1f0bc64f    0.034992
+d787e91b    0.034705
+76dc4769    0.019032
+be6db1d7    0.018531
+              ...   
+92f4ba26    0.000001
+f105819b    0.000001
+0a426b70    0.000001
+0ad241a6    0.000001
+ea7e24e9    0.000001
+Name: proportion, Length: 5134, dtype: float64
+unique counts of site_category 2856
+site_domain
+c4e18dd6    0.374018
+f3845767    0.160469
+7e091613    0.082353
+7687a86e    0.031838
+98572c79    0.024928
+              ...   
+4a7c84c3    0.000001
+556161c2    0.000001
+15232937    0.000001
+655cfaeb    0.000001
+1d61eb21    0.000001
+Name: proportion, Length: 2856, dtype: float64
+unique counts of site_category 201
+app_domain
+7801e8d9    0.674205
+2347f47a    0.129211
+ae637522    0.045997
+5c5a694b    0.027740
+82e27996    0.018876
+              ...   
+23e2c80e    0.000001
+7ecafa37    0.000001
+b6c7e8e1    0.000001
+5ced45bd    0.000001
+fd68cbd8    0.000001
+Name: proportion, Length: 201, dtype: float64
+unique counts of site_category 27
+app_category
+07d7df22    0.647600
+0f2161f8    0.236210
+cef3e649    0.042953
+8ded1f7a    0.036077
+f95efa07    0.028118
+d1327cf5    0.003100
+09481d60    0.001344
+dc97ec06    0.001323
+75d80bbe    0.001035
+fc6fa53d    0.000636
+4ce2e9fc    0.000519
+879c24eb    0.000304
+a3c42688    0.000256
+4681bb9d    0.000168
+0f9a328c    0.000150
+a86a3e89    0.000061
+8df2e842    0.000047
+2281a340    0.000046
+79f0b860    0.000015
+0bfbc358    0.000011
+7113d72a    0.000010
+2fc4f2aa    0.000005
+a7fd01ec    0.000004
+5326cf99    0.000003
+18b1e0be    0.000003
+6fea3693    0.000001
+71af18ce    0.000001
+Name: proportion, dtype: float64
+unique counts of site_category 22
+site_category
+50e219e0    0.408445
+f028772b    0.313279
+28905ebd    0.182775
+3e814130    0.075437
+f66779e6    0.006326
+75fa27f6    0.003970
+335d28a8    0.003420
+76b2941d    0.002560
+c0dd3be3    0.001065
+72722551    0.000745
+dedf689d    0.000587
+70fb0e29    0.000566
+0569f928    0.000439
+8fd0aea4    0.000162
+a818d37a    0.000079
+42a36e14    0.000060
+e787de0e    0.000034
+bcf865d9    0.000022
+9ccfa2ea    0.000014
+5378d028    0.000011
+da34532e    0.000003
+c706e647    0.000001
+Name: proportion, dtype: float64
+unique counts of site_category 7
+banner_pos
+0    0.720070
+1    0.278192
+7    0.001066
+2    0.000306
+4    0.000177
+5    0.000140
+3    0.000049
+Name: proportion, dtype: float64
+unique counts of site_category 5
+device_type
+1    0.922880
+0    0.054695
+4    0.019212
+5    0.003212
+2    0.000001
+Name: proportion, dtype: float64
+unique counts of site_category 4
+device_conn_type
+0    0.863460
+2    0.081945
+3    0.053601
+5    0.000994
+Name: proportion, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_cat</span><span class="p">:</span>
+    <span class="n">top10</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">top10</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">]</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">top10</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Top 10 valores más frecuentes - </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9c97ea0f3e824149dabc8ea9070a8abe3caaf9512c04425c859698e3fcd9cec7.png" src="_images/9c97ea0f3e824149dabc8ea9070a8abe3caaf9512c04425c859698e3fcd9cec7.png" />
+<img alt="_images/78bd3e21587bd0ee32f9c5125af098502a5852e51aceb66d1ab75fef22c75272.png" src="_images/78bd3e21587bd0ee32f9c5125af098502a5852e51aceb66d1ab75fef22c75272.png" />
+<img alt="_images/93a121f2b283b55528481f74dfb82475304055f0edce51ad66778677672b7e66.png" src="_images/93a121f2b283b55528481f74dfb82475304055f0edce51ad66778677672b7e66.png" />
+<img alt="_images/a353ce046ba153e3ab105f2fa4589a8f87f38eded13371bce786a542aa4ddf9f.png" src="_images/a353ce046ba153e3ab105f2fa4589a8f87f38eded13371bce786a542aa4ddf9f.png" />
+<img alt="_images/ea5d2de61b4b0fa158613a156fe4395b12e2c3adcf25b3cffe1636d3a4f9de12.png" src="_images/ea5d2de61b4b0fa158613a156fe4395b12e2c3adcf25b3cffe1636d3a4f9de12.png" />
+<img alt="_images/a846d3670c36e307be9bdc4fd7c7362aaf9ae6b7c9b56294e39c66c0873bf9aa.png" src="_images/a846d3670c36e307be9bdc4fd7c7362aaf9ae6b7c9b56294e39c66c0873bf9aa.png" />
+<img alt="_images/23291ccd072554034433f887ad499cb0917bbec017b36df998830ed712ad74bb.png" src="_images/23291ccd072554034433f887ad499cb0917bbec017b36df998830ed712ad74bb.png" />
+<img alt="_images/cfb4d86cca74db0446d72a4b3908d83cf814c13ed06a5116704f81b46ed5af37.png" src="_images/cfb4d86cca74db0446d72a4b3908d83cf814c13ed06a5116704f81b46ed5af37.png" />
+</div>
+</div>
+<p>Al examinar la distribución de frecuencias para las variables con alta cardinalidad, podemos destacar los siguientes patrones:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">device_model</span></code>: Observamos que los 10 modelos de dispositivo más frecuentes tienen volúmenes de aparición relativamente equilibrados entre sí. Ninguno de ellos concentra una proporción abrumadoramente mayoritaria de los registros, lo que sugiere una diversidad considerable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_domain</span></code>: Aquí se evidencia una concentración mucho más marcada. El dominio principal acumula alrededor de 370,000 registros, superando ampliamente al segundo (160,000) y al resto.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_domain</span></code>: El dominio de aplicación más frecuente concentra aproximadamente 680,000 registros, lo que representa más de dos tercios del total del subsample.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app_category</span></code>: La categoría de aplicación más frecuente también muestra una alta concentración, con un comportamiento parecido a <code class="docutils literal notranslate"><span class="pre">app_domain</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">site_category</span></code>: Comportamiento parecido a <code class="docutils literal notranslate"><span class="pre">app_category</span></code>, 400,000 registros la categoría principal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">banner_pos</span></code>, <code class="docutils literal notranslate"><span class="pre">device_type</span></code>, <code class="docutils literal notranslate"><span class="pre">device_conn_type</span></code>: Pocos valores únicos, concentraciones altas entre 2-3 valores.</p></li>
+</ul>
+</section>
+<section id="distribuciones-variables-temporales">
+<h2><strong>Distribuciones variables temporales</strong><a class="headerlink" href="#distribuciones-variables-temporales" title="Link to this heading">#</a></h2>
+<p>A continuación, procedemos a analizar el comportamiento de las variables temporales derivadas (hora, día, mes y año).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">var_temporales</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="s1">&#39;dia&#39;</span><span class="p">,</span> <span class="s1">&#39;mes&#39;</span><span class="p">,</span> <span class="s1">&#39;año&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">var_temporales</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>hour</th>
+      <th>dia</th>
+      <th>mes</th>
+      <th>año</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>1000000.000000</td>
+      <td>1000000.000000</td>
+      <td>1000000.0</td>
+      <td>1000000.0</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>11.274396</td>
+      <td>25.469938</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>5.958183</td>
+      <td>2.963766</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>21.000000</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>6.000000</td>
+      <td>23.000000</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>11.000000</td>
+      <td>26.000000</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>16.000000</td>
+      <td>28.000000</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>23.000000</td>
+      <td>30.000000</td>
+      <td>10.0</td>
+      <td>2014.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_temporales</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">var</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribución temporal - </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/32bc775382ff3439012aeb43b18463ef3cde093a55fdbcd9eec9bcc94c3bc54f.png" src="_images/32bc775382ff3439012aeb43b18463ef3cde093a55fdbcd9eec9bcc94c3bc54f.png" />
+<img alt="_images/f977dfc5fe650d6e8c4ba1e8f6fa9165adb7a0013d36d4df2349b19de463deb2.png" src="_images/f977dfc5fe650d6e8c4ba1e8f6fa9165adb7a0013d36d4df2349b19de463deb2.png" />
+<img alt="_images/32ca22f2313b6e2c1cc24ea3f097ae12b2d5820c901ec972cabf621cf083f807.png" src="_images/32ca22f2313b6e2c1cc24ea3f097ae12b2d5820c901ec972cabf621cf083f807.png" />
+<img alt="_images/b4092073852c79ad36413971b718bada946b0a3e1786c63112cb09353e6ce4ae.png" src="_images/b4092073852c79ad36413971b718bada946b0a3e1786c63112cb09353e6ce4ae.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hour</span></code>: La actividad por horas muestra un comportamiento esperado de usuarios activos durante el día. La mayor actividad de usuarios se presenta durante las 7 y las 17 horas, con picos que rondan los 60,000 registros en estas horas centrales. Por el contrario, las horas de madrugada (entre las 0 y las 6 horas) presentan la actividades más bajas, con valores que rondan los 20,000 registros</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dia</span></code>: En los días analizados (del 21 al 30), observamos fluctuaciones significativas. Los días 22 y 28 concentran los volúmenes más altos, superando los 130,000 usuarios activos, mientras que el día 27 presenta el registro más bajo, cercano a 80,000. Estas variaciones podrían estar asociadas a días específicos de la semana.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mes</span></code>, <code class="docutils literal notranslate"><span class="pre">año</span></code>: Las gráficas de mes y año no aportan información relevante, dado que el dataset contempla únicamente registros del mes de Noviembre en el año 2014.</p></li>
+</ul>
+<p>Para el modelado final excluiremos las variables <code class="docutils literal notranslate"><span class="pre">año</span></code>, <code class="docutils literal notranslate"><span class="pre">mes</span></code>, <code class="docutils literal notranslate"><span class="pre">dia</span></code> , dado que cuentan con pocas categorías que no añaden valor predictivo al modelo.</p>
+</section>
+<section id="distribucion-variable-objetivo">
+<h2><strong>Distribución variable Objetivo</strong><a class="headerlink" href="#distribucion-variable-objetivo" title="Link to this heading">#</a></h2>
+<p>Procedemos a observar la distribución de nuestra variable objetivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>click
+0    0.830263
+1    0.169737
+Name: proportion, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">catplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.FacetGrid at 0x225184b69a0&gt;
+</pre></div>
+</div>
+<img alt="_images/cbb3c237152f76048fa396525ee00a04730e2eeff4047fe77a46642afe4f24e9.png" src="_images/cbb3c237152f76048fa396525ee00a04730e2eeff4047fe77a46642afe4f24e9.png" />
+</div>
+</div>
+<p>Observamos un alto desbalance de clases, favoreciendo la clase de <code class="docutils literal notranslate"><span class="pre">'no</span> <span class="pre">click'</span></code> con 83% de los registros, <code class="docutils literal notranslate"><span class="pre">'click'</span></code> 17% de los registros.</p>
+</section>
+<section id="analisis-bivariado">
+<h2><strong>Análisis Bivariado</strong><a class="headerlink" href="#analisis-bivariado" title="Link to this heading">#</a></h2>
+<section id="distribucion-click-con-respecto-a-hora">
+<h3><strong>Distribución click con respecto a hora</strong><a class="headerlink" href="#distribucion-click-con-respecto-a-hora" title="Link to this heading">#</a></h3>
+<p>Estudiamos la relación de entre <code class="docutils literal notranslate"><span class="pre">click</span></code> y hora del día.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">catplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribución temporal click por hora&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/782b59249a0855eba5588978f1ca12bcccab3460f83275c38dc970b32cf01689.png" src="_images/782b59249a0855eba5588978f1ca12bcccab3460f83275c38dc970b32cf01689.png" />
+</div>
+</div>
+</section>
+<section id="tasa-de-clicks-por-hora">
+<h3><strong>Tasa de clicks por hora</strong><a class="headerlink" href="#tasa-de-clicks-por-hora" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ctr_hour</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;hour&#39;</span><span class="p">)[</span><span class="s1">&#39;click&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ctr_hour</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hour
+0     17.697228
+1     18.605988
+2     17.476081
+3     17.383662
+4     15.837628
+5     16.172276
+6     16.691234
+7     18.002234
+8     16.415808
+9     16.113543
+10    16.011130
+11    17.046924
+12    17.117902
+13    17.067494
+14    18.133265
+15    17.974437
+16    18.081013
+17    17.088608
+18    16.837294
+19    16.294018
+20    15.944096
+21    16.007025
+22    16.122594
+23    17.435999
+Name: click, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Las horas de 0 a 3 am cuentan tasas de clicks altas (<code class="docutils literal notranslate"><span class="pre">17-18%</span></code>). Lo que podría indicar que los usuarios que navegan de madrugada son más propensos a hacer clic, se observa un segundo pico a las 7 horas (<code class="docutils literal notranslate"><span class="pre">18%</span></code>), este grupo pertenece al de personas que revisan sus dispositivos al despertar. Por último, se observa un tercer pico de las 2 a 5 pm (<code class="docutils literal notranslate"><span class="pre">17-18%</span></code>), estas horas están asociadas comunmente con horas de descanso laboral.</p>
+<p>Las dos horas que cuentan con menor tasa de clicks corresponden a las 4 am y 8 pm (<code class="docutils literal notranslate"><span class="pre">15%</span></code>). Este comportamiento podría estar asociado a desconexión nocturna y relacionado con horarios de cena (8 pm)</p>
+</section>
+<section id="relacion-variable-click-con-variables-anonimas">
+<h3><strong>Relación variable click, con variables anónimas</strong><a class="headerlink" href="#relacion-variable-click-con-variables-anonimas" title="Link to this heading">#</a></h3>
+<p>Evaluamos el comportamiento de clicks con relación a la distribución de variables anónimas</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables_anon</span><span class="p">:</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Análisis de </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1"> vs click&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+    
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f0732a9d08db51ec585c561c5543a33014f6178cd8fbe2ac2850d2f7fc3a3cb1.png" src="_images/f0732a9d08db51ec585c561c5543a33014f6178cd8fbe2ac2850d2f7fc3a3cb1.png" />
+<img alt="_images/9f4023b355d9a405953bca78264e033a58d5d6f8e5403ca1b472383d90c27d90.png" src="_images/9f4023b355d9a405953bca78264e033a58d5d6f8e5403ca1b472383d90c27d90.png" />
+<img alt="_images/d61440e51abb819102cf36609b3de904f49e8f91450c89556522b93519c5d1f2.png" src="_images/d61440e51abb819102cf36609b3de904f49e8f91450c89556522b93519c5d1f2.png" />
+<img alt="_images/336046b985c4e62beba2f07a8039d2190bf347e74f0f41703785c8390b72e72c.png" src="_images/336046b985c4e62beba2f07a8039d2190bf347e74f0f41703785c8390b72e72c.png" />
+<img alt="_images/12ac9ed821be4eead87003647465b72c9fed99602ba27d206dce683f246809db.png" src="_images/12ac9ed821be4eead87003647465b72c9fed99602ba27d206dce683f246809db.png" />
+<img alt="_images/8f105bd19233dc6ced741c1902baa827bb9f43678c920ae1c45660f26c3b46f5.png" src="_images/8f105bd19233dc6ced741c1902baa827bb9f43678c920ae1c45660f26c3b46f5.png" />
+<img alt="_images/cf769eb3014ca44c6b59b92638cafab2467bfe81b37271a2787fab7fe3ddc272.png" src="_images/cf769eb3014ca44c6b59b92638cafab2467bfe81b37271a2787fab7fe3ddc272.png" />
+<img alt="_images/f5cab9d4533b28b804c8aefc860577b5df31652635734783a09554dfd2fc8f18.png" src="_images/f5cab9d4533b28b804c8aefc860577b5df31652635734783a09554dfd2fc8f18.png" />
+<img alt="_images/7368ec3c3c36bd2c44d1a61557cf263d25f63edd930186e50c4ed7d7d1c85859.png" src="_images/7368ec3c3c36bd2c44d1a61557cf263d25f63edd930186e50c4ed7d7d1c85859.png" />
+</div>
+</div>
+<p>La distribución de la variables anónimas es similar para las observaciones con y sin click. Los picos de densidad se presentan en los mismos valores para ambas clases, lo que sugiere que la presencia de clicks sigue principalmente la distribución general de las impresiones. Este hallazgo sugiere que, de manera individual, estas variables no discriminan claramente entre las clases y su aporte al modelo podría manifestarse a través de interacciones con otras variables, captando relaciones no lineales.</p>
+</section>
+<section id="relacion-variables-categoricas-con-variable-click">
+<h3><strong>Relación variables categóricas con variable click</strong><a class="headerlink" href="#relacion-variables-categoricas-con-variable-click" title="Link to this heading">#</a></h3>
+<p>Relación entre variables categóricas no anónimas y variable click.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">var_cat</span><span class="p">:</span>
+    <span class="n">top10</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">top10</span><span class="p">)]</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">catplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">subset</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">var</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribución click por </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s1">&#39;</span> <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/01a683376c2da3ef25e9760db7a8e29f4342fdfe7a99617507a88297e0d0b249.png" src="_images/01a683376c2da3ef25e9760db7a8e29f4342fdfe7a99617507a88297e0d0b249.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/0bd97fffb9fedb5f4f69f2281f8a849c9a935640443e47cb40b4403ced0d030a.png" src="_images/0bd97fffb9fedb5f4f69f2281f8a849c9a935640443e47cb40b4403ced0d030a.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/21ba27f4c1aa219b9f7de374ffec7f51be40f58adaaa640d80f68d18a0710a0c.png" src="_images/21ba27f4c1aa219b9f7de374ffec7f51be40f58adaaa640d80f68d18a0710a0c.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/be3d7329f687aaed3605ea0e0b5d131e4d6e4463a853ae0b532680a33baa56ea.png" src="_images/be3d7329f687aaed3605ea0e0b5d131e4d6e4463a853ae0b532680a33baa56ea.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/db4ed71c2f4996cb142f43875566a716b5d9737eeb7aceaeba9d2d3533dded35.png" src="_images/db4ed71c2f4996cb142f43875566a716b5d9737eeb7aceaeba9d2d3533dded35.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/eb4defcb0dd7a778a42bf302625f34ea41541745feba3f0327471101ea800c9d.png" src="_images/eb4defcb0dd7a778a42bf302625f34ea41541745feba3f0327471101ea800c9d.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/5a721128e3a4307256684daf3bf3ab956baf7904bf836e509f4785fa2f87f539.png" src="_images/5a721128e3a4307256684daf3bf3ab956baf7904bf836e509f4785fa2f87f539.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 600x400 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/71647088cbe0e2aeb980e9a523e7e932a160ea1947acb2f42994ed296f357e3f.png" src="_images/71647088cbe0e2aeb980e9a523e7e932a160ea1947acb2f42994ed296f357e3f.png" />
+</div>
+</div>
+<p>Caso similar a las variables anónimas. Al analizar los conteos absolutos, no se observan diferencias claras entre las clases que permitan identificar categorías específicas con una mayor propensión al click.</p>
+</section>
+<section id="guardado-del-dataframe-para-uso-en-sklearn">
+<h3><strong>Guardado del Dataframe para uso en Sklearn</strong><a class="headerlink" href="#guardado-del-dataframe-para-uso-en-sklearn" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="sa">r</span><span class="s1">&#39;datos\train\train_sklearn_model.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusiones">
+<h2><strong>Conclusiones</strong><a class="headerlink" href="#conclusiones" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Variables identificadoras</strong>: Se eliminaron aquellas columnas que funcionaban como identificadores únicos (<code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">device_ip</span></code>, <code class="docutils literal notranslate"><span class="pre">device_id</span></code>, <code class="docutils literal notranslate"><span class="pre">app_id</span></code>, <code class="docutils literal notranslate"><span class="pre">site_id</span></code>), ya que no aportaban valor predictivo y podían generar ruido en el modelo.</p></li>
+<li><p><strong>Variables temporales</strong>: La variable <code class="docutils literal notranslate"><span class="pre">hour</span></code> mostró un patrón claro de estacionalidad diurna, con tasas de clics más altas en horarios específicos (madrugada, mañana temprano y tarde). En cambio, <code class="docutils literal notranslate"><span class="pre">dia</span></code>, <code class="docutils literal notranslate"><span class="pre">mes</span></code> y <code class="docutils literal notranslate"><span class="pre">año</span></code> serán excluidas dado que el período analizado no permite extraer patrones útiles a partir de ellas.</p></li>
+<li><p><strong>Variables anónimas y categóricas</strong>: La mayoría presentan distribuciones son similares entre clicks y no clicks, lo que sugiere que la contribución de estas variables al modelo podría manifestarse principalmente a través de interacciones no linales. Además, eliminaremos la variable <code class="docutils literal notranslate"><span class="pre">c14</span></code>, ya que presenta una alta correlación con la variable <code class="docutils literal notranslate"><span class="pre">c17</span></code>. Este nivel de correlación indica que ambas variables contienen información redundante y por lo tanto, describen patrones muy similares dentro del conjunto de datos.</p></li>
+</ul>
+<section id="modelado">
+<h3><strong>Modelado</strong><a class="headerlink" href="#modelado" title="Link to this heading">#</a></h3>
+<p>Procederemos a la etapa de modelado utilizando dos enfoques complementarios:</p>
+<p>En <strong>Scikit-learn</strong>:</p>
+<ul class="simple">
+<li><p>Aplicaremos <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> para codificar las variables categóricas, reemplazando cada categoría por la tasa de clics promedio correspondiente.</p></li>
+<li><p>Para evitar estimaciones extremadamente bajas o altas en aquellas categorías con pocas observaciones, agruparemos las categorías raras (aquellas con frecuencia baja) antes de la codificación.</p></li>
+</ul>
+<p>En <strong>PySpark</strong>:</p>
+<p>Dado que PySpark no cuenta con una implementación nativa de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>, utilizaremos un enfoque alternativo:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> para convertir las variables categóricas en índices numéricos.</p></li>
+</ul>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="2_mini_modelado_sklearn.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-del-proyecto"><strong>Contexto del Proyecto</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-de-datos-click-through-rate-prediction"><strong>Base de Datos: Click-Through Rate Prediction</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#origen"><strong>Origen</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas"><strong>Características</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-analizadas"><strong>Variables analizadas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo"><strong>Variable Objetivo</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias-analisis-exploratorio"><strong>Importación de Librerías - Análisis exploratorio</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-de-datos"><strong>Lectura de Datos</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cambio-nombre-de-columnas"><strong>Cambio nombre de columnas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-dataframe"><strong>Tamaño Dataframe</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-faltantes"><strong>Datos faltantes</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-a-tipo-de-dato-fecha"><strong>Conversión a tipo de dato fecha</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extraccion-variables-temporales"><strong>Extracción variables temporales</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encabezado-dataframe"><strong>Encabezado Dataframe</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tipos-de-datos-y-cardinalidad"><strong>Tipos de Datos y cardinalidad</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eliminar-variables-identificadoras"><strong>Eliminar variables identificadoras</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verificamos-cardinalidad-y-cambios-realizados-en-el-dataframe"><strong>Verificamos cardinalidad y cambios realizados en el Dataframe</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-univariado"><strong>Análisis univariado</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuciones-variables-anonimizadas"><strong>Distribuciones variables anonimizadas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#proporcion-de-cada-categoria"><strong>Proporción de cada categoría</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-correlacion-variables-anonimas"><strong>Matriz de correlación - Variables anónimas</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-variables-categoricas"><strong>Distribución variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribuciones-variables-temporales"><strong>Distribuciones variables temporales</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-variable-objetivo"><strong>Distribución variable Objetivo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-bivariado"><strong>Análisis Bivariado</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-click-con-respecto-a-hora"><strong>Distribución click con respecto a hora</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tasa-de-clicks-por-hora"><strong>Tasa de clicks por hora</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-variable-click-con-variables-anonimas"><strong>Relación variable click, con variables anónimas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-variables-categoricas-con-variable-click"><strong>Relación variables categóricas con variable click</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#guardado-del-dataframe-para-uso-en-sklearn"><strong>Guardado del Dataframe para uso en Sklearn</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones"><strong>Conclusiones</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelado"><strong>Modelado</strong></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Cristian Linero, David Marquez, Johan Díaz, Luis Peñaranda
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
