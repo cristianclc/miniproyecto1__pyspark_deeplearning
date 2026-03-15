@@ -541,7 +541,7 @@ only showing top 5 rows
 </section>
 <section id="extraccion-y-conversion-de-variables-temporales">
 <h3><strong>Extracción y conversión de variables temporales</strong><a class="headerlink" href="#extraccion-y-conversion-de-variables-temporales" title="Link to this heading">#</a></h3>
-<p>Posteriormente, extraemos variables temporales específicas con el fin de analizar los datos con mayor detalle, para esto, creamos 4 nuevas variables que corresponden a: <code class="docutils literal notranslate"><span class="pre">dia</span></code>, <code class="docutils literal notranslate"><span class="pre">mes</span></code>, <code class="docutils literal notranslate"><span class="pre">año</span></code>, <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p>
+<p>Posteriormente, extraemos las mismas variables temporales usadas en el modelado de scikit-learn creamos una nueva variable temporal que corresponde a la hora: <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_spark</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
