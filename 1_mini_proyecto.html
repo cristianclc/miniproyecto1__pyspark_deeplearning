@@ -1906,13 +1906,14 @@ Name: click, dtype: float64
 <p>Procederemos a la etapa de modelado utilizando dos enfoques complementarios:</p>
 <p>En <strong>Scikit-learn</strong>:</p>
 <ul class="simple">
-<li><p>Aplicaremos <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> para codificar las variables categóricas, reemplazando cada categoría por la tasa de clics promedio correspondiente.</p></li>
+<li><p>Aplicaremos <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> para codificar las variables categóricas, reemplazando cada categoría por la tasa de clicks promedio correspondiente.</p></li>
 <li><p>Para evitar estimaciones extremadamente bajas o altas en aquellas categorías con pocas observaciones, agruparemos las categorías raras (aquellas con frecuencia baja) antes de la codificación.</p></li>
 </ul>
 <p>En <strong>PySpark</strong>:</p>
-<p>Dado que PySpark no cuenta con una implementación nativa de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>, utilizaremos un enfoque alternativo:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> para convertir las variables categóricas en índices numéricos.</p></li>
+<li><p>Para controlar la dimensionalidad, en las variables con alta cardinalidad se convervaremos únicamente las 50 categorías más frecuentes, agrupando el resto bajo la etiqueta <code class="docutils literal notranslate"><span class="pre">'OTHER'</span></code>.</p></li>
+<li><p>Se aplicará undersampling para reducir el dataset de 40M a 10M de registros balanceados (50% click / 50% no click).</p></li>
+<li><p>Aplicaremos <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code> para codificar las variables categóricas.</p></li>
 </ul>
 </section>
 </section>

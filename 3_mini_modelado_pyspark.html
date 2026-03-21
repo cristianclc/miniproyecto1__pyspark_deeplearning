@@ -386,10 +386,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elimininamos-variables-identificadoras"><strong>Elimininamos variables identificadoras</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-tipo-de-variables"><strong>Separación tipo de variables</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-a-variables-categoricas"><strong>Conversión a variables categóricas</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agrupar-variables-de-alta-cardinalidad"><strong>Agrupar variables de alta cardinalidad</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-de-cardinalidad-top-50-categorias"><strong>Reducción de cardinalidad - Top 50 categorías</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-conjunto-train-test"><strong>Separación conjunto Train - Test</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#undersampling-y-separacion-conjunto-train-test"><strong>Undersampling y Separación conjunto Train - Test</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-de-la-distribucion-de-clases"><strong>Validación de la distribución de clases</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-variables"><strong>Preprocesamiento variables</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline"><strong>Pipeline</strong></a></li>
@@ -536,12 +536,11 @@ only showing top 5 rows
 </div>
 </div>
 </div>
-<p>Hasta ahora hemos trabajado con un subsample de 1 millón de registros para el modelado en Scikit-learn, lo que permitió agilizar el análisis exploratorio y la optimización de hiperparámetros. Sin embargo, el dataset completo cuenta con 40 millones de observaciones, lo que representa un incremento de 40 veces en volumen de datos.</p>
-<p>Este aumento de escala motiva el uso de PySpark, ya que está diseñado para manejar grandes volúmenes de datos mediante procesamiento distribuido, optimizando el uso de memoria y tiempo de cómputo en entornos de big data.</p>
+<p>El dataset completo cuenta con 40 millones de observaciones. Para este experimento se aplica <strong>undersampling</strong> reduciendo el volumen a <strong>10 millones de registros</strong> con un balance perfecto de clases (<strong>50% clase 0 / 50% clase 1</strong>), lo que permite al MLP aprender patrones de ambas clases sin sesgo hacia la mayoritaria y reduce significativamente el tiempo de entrenamiento respecto al dataset completo.</p>
 </section>
 <section id="extraccion-y-conversion-de-variables-temporales">
 <h3><strong>Extracción y conversión de variables temporales</strong><a class="headerlink" href="#extraccion-y-conversion-de-variables-temporales" title="Link to this heading">#</a></h3>
-<p>Posteriormente, extraemos las mismas variables temporales usadas en el modelado de scikit-learn creamos una nueva variable temporal que corresponde a la hora: <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p>
+<p>Posteriormente, extraemos variables temporales específicas con el fin de analizar los datos con mayor detalle, para esto, creamos una nueva variable que corresponde a <code class="docutils literal notranslate"><span class="pre">hour</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_spark</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
@@ -677,105 +676,64 @@ only showing top 5 rows
 </div>
 </div>
 </section>
-<section id="agrupar-variables-de-alta-cardinalidad">
-<h3><strong>Agrupar variables de alta cardinalidad</strong><a class="headerlink" href="#agrupar-variables-de-alta-cardinalidad" title="Link to this heading">#</a></h3>
+<section id="reduccion-de-cardinalidad-top-50-categorias">
+<h3><strong>Reducción de cardinalidad - Top 50 categorías</strong><a class="headerlink" href="#reduccion-de-cardinalidad-top-50-categorias" title="Link to this heading">#</a></h3>
+<p>Para las variables con de alta cardinalidad, se conservan únicamente las <strong>50 categorías más frecuentes</strong> y el resto se agrupa bajo la etiqueta <code class="docutils literal notranslate"><span class="pre">'OTHER'</span></code>. Esto lo realizamos con el objetivo de evitar una explosión de dimensionalidad a la hora de implementar <code class="docutils literal notranslate"><span class="pre">OneHotEncoding</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">countDistinct</span><span class="p">(</span><span class="n">col_name</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">col_name</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>click 2
-hour 24
-C1 7
-banner_pos 7
-site_domain 7745
-site_category 26
-app_domain 559
-app_category 36
-device_model 8251
-device_type 5
-device_conn_type 4
-C15 8
-C16 9
-C17 435
-C18 4
-C19 68
-C20 172
-C21 60
-</pre></div>
-</div>
-</div>
-</div>
-<p>Para las variables con mayor cardinalidad <code class="docutils literal notranslate"><span class="pre">device_model</span></code>, <code class="docutils literal notranslate"><span class="pre">site_domain</span></code> y <code class="docutils literal notranslate"><span class="pre">C17</span></code>, se identifican aquellas categorías con menos de 20,000 ocurrencias y se agrupan bajo la etiqueta <code class="docutils literal notranslate"><span class="pre">'OTHER'</span></code>. Esta transformación reduce la dimensionalidad y evita que categorías con pocas observaciones generen estimaciones inestables en etapas posteriores de modelado, manteniendo únicamente las categorías más representativas.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;device_model&#39;</span><span class="p">,</span> <span class="s1">&#39;site_domain&#39;</span><span class="p">,</span> <span class="s1">&#39;C17&#39;</span><span class="p">]:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TOP_N</span> <span class="o">=</span> <span class="mi">50</span> 
+<span class="n">vars_categoricas</span> <span class="o">=</span> <span class="n">var_cat</span> <span class="o">+</span> <span class="n">var_anon</span>
 
-    <span class="n">freq</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-
-    <span class="n">rare</span> <span class="o">=</span> <span class="n">freq</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">20000</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
-    <span class="n">rare_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rare</span><span class="o">.</span><span class="n">collect</span><span class="p">()]</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">vars_categoricas</span><span class="p">:</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">desc</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">))</span>
+    <span class="n">top_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">freq</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">TOP_N</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()]</span>
 
     <span class="n">df_spark</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
         <span class="n">var</span><span class="p">,</span>
-        <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">rare_list</span><span class="p">),</span> <span class="s2">&quot;OTHER&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+        <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="n">var</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">top_list</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="n">var</span><span class="p">))</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="s1">&#39;OTHER&#39;</span><span class="p">)</span>
     <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">countDistinct</span><span class="p">(</span><span class="n">col_name</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">col_name</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>click 2
-hour 24
-C1 7
-banner_pos 7
-site_domain 93
-site_category 26
-app_domain 559
-app_category 36
-device_model 285
-device_type 5
-device_conn_type 4
-C15 8
-C16 9
-C17 201
-C18 4
-C19 68
-C20 172
-C21 60
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 </section>
-<section id="separacion-conjunto-train-test">
-<h2><strong>Separación conjunto Train - Test</strong><a class="headerlink" href="#separacion-conjunto-train-test" title="Link to this heading">#</a></h2>
-<p>Se divide el conjunto de datos en dos particiones: 80% para entrenamiento y 20% para prueba, utilizando <code class="docutils literal notranslate"><span class="pre">randomSplit</span></code> con semilla 42 para garantizar reproducibilidad.</p>
+<section id="undersampling-y-separacion-conjunto-train-test">
+<h2><strong>Undersampling y Separación conjunto Train - Test</strong><a class="headerlink" href="#undersampling-y-separacion-conjunto-train-test" title="Link to this heading">#</a></h2>
+<p>Se aplica <strong>undersampling</strong> para reducir el dataset de 40M a 10M de registros balanceados (50% click / 50% no click). La clase minoritaria (click=1) se toma completa y se muestrea la clase mayoritaria (click=0) hasta igualar su tamaño. Posteriormente se divide en 80% train y 20% test manteniendo el balance de clases.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_spark</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
 
-<span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">TARGET_TOTAL</span> <span class="o">=</span> <span class="mi">10_000_000</span>  
+<span class="n">TARGET_PER_CLASS</span> <span class="o">=</span> <span class="n">TARGET_TOTAL</span> <span class="o">//</span> <span class="mi">2</span> 
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tamaño train: </span><span class="si">{</span><span class="n">train_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">}</span><span class="s2">, test: </span><span class="si">{</span><span class="n">test_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">df_minority</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> 
+<span class="n">df_majority</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>  
+
+<span class="n">n_minority</span> <span class="o">=</span> <span class="n">df_minority</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">n_majority</span> <span class="o">=</span> <span class="n">df_majority</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Clase 1 original: </span><span class="si">{</span><span class="n">n_minority</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1"> | Clase 0 original: </span><span class="si">{</span><span class="n">n_majority</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">n_take</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_minority</span><span class="p">,</span> <span class="n">TARGET_PER_CLASS</span><span class="p">)</span>
+<span class="n">fraction_maj</span> <span class="o">=</span> <span class="n">n_take</span> <span class="o">/</span> <span class="n">n_majority</span>
+<span class="n">fraction_min</span> <span class="o">=</span> <span class="n">n_take</span> <span class="o">/</span> <span class="n">n_minority</span>
+
+<span class="n">df_minority_s</span> <span class="o">=</span> <span class="n">df_minority</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">withReplacement</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">fraction_min</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">df_majority_s</span> <span class="o">=</span> <span class="n">df_majority</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">withReplacement</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="n">fraction_maj</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">df_balanced</span> <span class="o">=</span> <span class="n">df_minority_s</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df_majority_s</span><span class="p">)</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Dataset balanceado: </span><span class="si">{</span><span class="n">df_balanced</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1"> registros&#39;</span><span class="p">)</span>
+
+<span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">df_balanced</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Train: </span><span class="si">{</span><span class="n">train_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1"> | Test: </span><span class="si">{</span><span class="n">test_data</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="si">:</span><span class="s1">,</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tamaño train: 32344946, test: 8084021
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clase 1 original: 6,865,066 | Clase 0 original: 33,563,901
+Dataset balanceado: 10,000,217 registros
+Train: 8,000,396 | Test: 1,999,747
 </pre></div>
 </div>
 </div>
@@ -798,61 +756,64 @@ C21 60
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Distribución en train:
-   click     count
-0      1   5494661
-1      0  26850285
+   click    count
+0      1  3998595
+1      0  4001721
 
 Distribución en test:
-   click    count
-0      1  1370405
-1      0  6713616
+   click   count
+0      1  999900
+1      0  999895
 </pre></div>
 </div>
 </div>
 </div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Train</span></code>: 26.85M de no clicks (80%) y 5.49M de clicks (20%)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Test</span></code>: 6.71M de no clicks (80%) y 1.37M de clicks (20%)</p></li>
-</ul>
-<p>Ambos conjuntos conservan la misma distribución de clases (80% - 20%), lo que indica que la partición aleatoria es representativa del conjunto original.</p>
+<p>Ambos conjuntos conservan la distribución balanceada <strong>50% click / 50% no click</strong> producto del undersampling, lo que garantiza que el MLP reciba señal equitativa de ambas clases durante el entrenamiento.</p>
 </section>
 <section id="preprocesamiento-variables">
 <h2><strong>Preprocesamiento variables</strong><a class="headerlink" href="#preprocesamiento-variables" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vars_categoricas</span> <span class="o">=</span> <span class="n">var_cat</span> <span class="o">+</span> <span class="n">var_anon</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vars_categoricas</span> <span class="o">=</span> <span class="n">var_cat</span> <span class="o">+</span> <span class="n">var_anon</span>
 
 <span class="n">indexers</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">StringIndexer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">_idx&#39;</span><span class="p">,</span> <span class="n">handleInvalid</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">vars_categoricas</span>
+    <span class="n">StringIndexer</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">_idx&#39;</span><span class="p">,</span> <span class="n">handleInvalid</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">vars_categoricas</span>
 <span class="p">]</span>
 
-<span class="n">idx_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">_idx&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">vars_categoricas</span><span class="p">]</span>
+<span class="n">encoders</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">inputCol</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">_idx&#39;</span><span class="p">,</span> <span class="n">outputCol</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">_ohe&#39;</span><span class="p">,</span> <span class="n">dropLast</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">handleInvalid</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">vars_categoricas</span>
+<span class="p">]</span>
+
+<span class="n">ohe_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1">_ohe&#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">vars_categoricas</span><span class="p">]</span>
+
 <span class="n">final_assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span>
-    <span class="n">inputCols</span><span class="o">=</span><span class="n">idx_cols</span><span class="p">,</span>
+    <span class="n">inputCols</span><span class="o">=</span><span class="n">ohe_cols</span><span class="p">,</span>
     <span class="n">outputCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>A diferencia de Scikit-learn, donde se utilizó <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> para codificar las categorías en función de la variable objetivo, PySpark no cuenta con una implementación nativa de este método. Como alternativa, y con el objetivo de no aumentar la dimensionalidad del dataset evitando <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code>, se opta por utilizar <code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code>, que asigna un índice numérico a cada categoría.</p>
-<p><code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> convierte las categorías en índices numéricos. El parámetro <code class="docutils literal notranslate"><span class="pre">handleInvalid='keep'</span></code> permite manejar valores no vistos durante el entrenamiento, asignándoles un índice especial.</p>
+<p>Se utiliza <strong>One Hot Encoding</strong> en lugar de <code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> directo, dado que OneHot representa correctamente la naturaleza nominal de las variables categóricas sin imponer un orden numérico artificial entre categorías.</p>
+<p>Gracias al top-50 aplicado previamente, la dimensionalidad es controlada, cada variable aporta máximo 50 columnas binarias, lo que hace viable el preprocesamiento a esta escala.</p>
 </section>
 <section id="pipeline">
 <h2><strong>Pipeline</strong><a class="headerlink" href="#pipeline" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prep_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">indexers</span> <span class="o">+</span> <span class="p">[</span><span class="n">final_assembler</span><span class="p">])</span>
-<span class="n">prep_model</span> <span class="o">=</span> <span class="n">prep_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
-<span class="n">sample</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prep_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">indexers</span> <span class="o">+</span> <span class="n">encoders</span> <span class="o">+</span> <span class="p">[</span><span class="n">final_assembler</span><span class="p">])</span>
+<span class="n">prep_model</span>    <span class="o">=</span> <span class="n">prep_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+<span class="n">sample</span>       <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">num_features</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Número de features: </span><span class="si">{</span><span class="n">num_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Número de features tras OHE: </span><span class="si">{</span><span class="n">num_features</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de features: 17
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de features tras OHE: 496
 </pre></div>
 </div>
 </div>
@@ -866,17 +827,17 @@ Distribución en test:
 <li><p><code class="docutils literal notranslate"><span class="pre">layers</span></code>:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">num_features</span></code>: capa de entrada con la dimensión del vector de características.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">100</span></code> y <code class="docutils literal notranslate"><span class="pre">50</span></code>: dos hidden layer con 100 y 50 neuronas respectivamente.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">100</span></code> hidden layer con 100 neuronas</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: output layer con 2 neuronas para clasificación binaria.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">stepSize</span></code>: Tasa de aprendizaje inicial de 0.001. Cabe aclarar que en Scikit-learn el parámetro <code class="docutils literal notranslate"><span class="pre">alpha</span></code> corresponde a regularización, no a la tasa de aprendizaje, por lo que este parámetro no es equivalente (PySpark no cuenta con parámetro de regularización).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stepSize</span></code>: Tasa de aprendizaje inicial de 0.01. Cabe aclarar que en Scikit-learn el parámetro <code class="docutils literal notranslate"><span class="pre">alpha</span></code> corresponde a regularización, no a la tasa de aprendizaje, por lo que este parámetro no es equivalente (PySpark no cuenta con parámetro de regularización).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">maxIter</span></code>: Número máximo de iteraciones fijado en 100, manteniendo el mismo valor que en la mejor configuración de Scikit-learn.</p></li>
 </ul>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_features</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span> <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_features</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
 <span class="p">]</span>
 </pre></div>
 </div>
@@ -894,7 +855,6 @@ Distribución en test:
     <span class="n">rawPredictionCol</span><span class="o">=</span><span class="s1">&#39;rawPrediction&#39;</span><span class="p">,</span>
     <span class="n">metricName</span><span class="o">=</span><span class="s1">&#39;areaUnderROC&#39;</span>
 <span class="p">)</span>
-
 <span class="n">evaluator_precision</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span>
     <span class="n">labelCol</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="n">predictionCol</span><span class="o">=</span><span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="n">metricName</span><span class="o">=</span><span class="s1">&#39;precisionByLabel&#39;</span><span class="p">)</span>
 <span class="n">evaluator_recall</span> <span class="o">=</span> <span class="n">MulticlassClassificationEvaluator</span><span class="p">(</span>
@@ -905,27 +865,28 @@ Distribución en test:
 <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Entrenando: </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Entrenando: </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="n">mlp</span> <span class="o">=</span> <span class="n">MultilayerPerceptronClassifier</span><span class="p">(</span>
         <span class="n">layers</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">],</span>
         <span class="n">stepSize</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">],</span>
         <span class="n">maxIter</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">],</span>
-        <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;gd&#39;</span><span class="p">,</span>
+        <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;l-bfgs&#39;</span><span class="p">,</span>
         <span class="n">labelCol</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span>
         <span class="n">featuresCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
     <span class="p">)</span>
 
-    <span class="n">full_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">indexers</span> <span class="o">+</span> <span class="p">[</span><span class="n">final_assembler</span><span class="p">,</span> <span class="n">mlp</span><span class="p">])</span>
+    <span class="n">train_transformed</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+    <span class="n">test_transformed</span>  <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
 
     <span class="n">start_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
-    <span class="n">train_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_train</span>
+    <span class="n">mlp_model</span>   <span class="o">=</span> <span class="n">mlp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_transformed</span><span class="p">)</span>
+    <span class="n">train_time</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_train</span>
 
-    <span class="n">start_pred</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
-    <span class="n">pred_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_pred</span>
+    <span class="n">start_pred</span>  <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">mlp_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_transformed</span><span class="p">)</span>
+    <span class="n">pred_time</span>   <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_pred</span>
 
     <span class="n">auc</span>       <span class="o">=</span> <span class="n">evaluator_auc</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
     <span class="n">precision</span> <span class="o">=</span> <span class="n">evaluator_precision</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="p">{</span><span class="n">evaluator_precision</span><span class="o">.</span><span class="n">metricLabel</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
@@ -933,35 +894,35 @@ Distribución en test:
     <span class="n">f1</span>        <span class="o">=</span> <span class="n">evaluator_f1</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="p">{</span><span class="n">evaluator_f1</span><span class="o">.</span><span class="n">metricLabel</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
 
     <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;auc&#39;</span><span class="p">:</span> <span class="n">auc</span><span class="p">,</span>
-        <span class="s1">&#39;precision&#39;</span><span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
-        <span class="s1">&#39;recall&#39;</span><span class="p">:</span> <span class="n">recall</span><span class="p">,</span>
-        <span class="s1">&#39;f1&#39;</span><span class="p">:</span> <span class="n">f1</span><span class="p">,</span>
+        <span class="s1">&#39;layers&#39;</span>    <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;stepSize&#39;</span>  <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;maxIter&#39;</span>   <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;auc&#39;</span>       <span class="p">:</span> <span class="n">auc</span><span class="p">,</span>
+        <span class="s1">&#39;precision&#39;</span> <span class="p">:</span> <span class="n">precision</span><span class="p">,</span>
+        <span class="s1">&#39;recall&#39;</span>    <span class="p">:</span> <span class="n">recall</span><span class="p">,</span>
+        <span class="s1">&#39;f1&#39;</span>        <span class="p">:</span> <span class="n">f1</span><span class="p">,</span>
         <span class="s1">&#39;train_time&#39;</span><span class="p">:</span> <span class="n">train_time</span><span class="p">,</span>
-        <span class="s1">&#39;pred_time&#39;</span><span class="p">:</span> <span class="n">pred_time</span>
+        <span class="s1">&#39;pred_time&#39;</span> <span class="p">:</span> <span class="n">pred_time</span>
     <span class="p">})</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC: </span><span class="si">{</span><span class="n">auc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | P: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | R: </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | F1: </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | &quot;</span>
-          <span class="sa">f</span><span class="s2">&quot;Train: </span><span class="si">{</span><span class="n">train_time</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s | Pred: </span><span class="si">{</span><span class="n">pred_time</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;AUC: </span><span class="si">{</span><span class="n">auc</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | P: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | R: </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | F1: </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | &#39;</span>
+          <span class="sa">f</span><span class="s1">&#39;Train: </span><span class="si">{</span><span class="n">train_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">s | Pred: </span><span class="si">{</span><span class="n">pred_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">s&#39;</span><span class="p">)</span>
 
     <span class="n">predictions</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;prediction&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenando: {&#39;layers&#39;: [17, 100, 50, 2], &#39;stepSize&#39;: 0.001, &#39;maxIter&#39;: 100}
-AUC: 0.5280 | P: 0.1420 | R: 0.0000 | F1: 0.0000 | Train: 3732.6s | Pred: 0.7s
-+-----+----------+-------+
-|click|prediction|  count|
-+-----+----------+-------+
-|    1|       0.0|1370382|
-|    0|       0.0|6713477|
-|    1|       1.0|     23|
-|    0|       1.0|    139|
-+-----+----------+-------+
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenando: {&#39;layers&#39;: [496, 100, 2], &#39;stepSize&#39;: 0.01, &#39;maxIter&#39;: 100}
+AUC: 0.7163 | P: 0.6411 | R: 0.7297 | F1: 0.6829 | Train: 8035.7s | Pred: 0.1s
++-----+----------+------+
+|click|prediction| count|
++-----+----------+------+
+|    1|       0.0|270706|
+|    0|       0.0|592982|
+|    1|       1.0|729361|
+|    0|       1.0|406808|
++-----+----------+------+
 </pre></div>
 </div>
 </div>
@@ -1004,70 +965,103 @@ AUC: 0.5280 | P: 0.1420 | R: 0.0000 | F1: 0.0000 | Train: 3732.6s | Pred: 0.7s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/13227d170fc39e259799ff23917d2953da5dce8946717da627fc4c59cca826d3.png" src="_images/13227d170fc39e259799ff23917d2953da5dce8946717da627fc4c59cca826d3.png" />
+<img alt="_images/4ffea19e401fce855953b317205593bab12b9c1219a96ba982632da7d272ba95.png" src="_images/4ffea19e401fce855953b317205593bab12b9c1219a96ba982632da7d272ba95.png" />
 </div>
 </div>
 <p><strong>Métricas de rendimiento</strong>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">AUC</span></code>: 0.5280, muy cercano a 0.5 (clasificador aleatorio), indicando que el modelo no logra discriminar entre clases.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Precisión</span></code>: 0.1420, baja.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Recall</span></code>: 0.0000, el modelo prácticamente no detecta ningún clic positivo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">F1-score</span></code>: 0.0000, reflejo del recall nulo.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AUC</span></code>: 0.7163, indica una capacidad discriminativa moderada, superior a un clasificador aleatorio (0.5), pero con margen de mejora.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Precisión</span></code>: 0.6411, de cada 100 predicciones positivas, aproximadamente 64 son realmente clics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Recall</span></code>: 0.7297, el modelo logra detectar cerca del 73% de los clics reales, mostrando una buena capacidad para identificar la clase positiva.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">F1-score</span></code>: 0.6829,  refleja un balance aceptable entre precisión y recall, aunque aún puede optimizarse.</p></li>
 </ul>
 <p><strong>Matriz de confusión:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">negativos</span></code>: 6,713,477</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">positivos</span></code>: 139</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">negativos</span></code>: 1,370,382</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">positivos</span></code>: 23</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">negativos</span></code>: 592,156</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">positivos</span></code>: 407,632</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">negativos</span></code>: 270,506</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">positivos</span></code>: 729,475</p></li>
 </ul>
-<p>El modelo en PySpark presenta un rendimiento muy pobre, prácticamente nulo para detectar la clase minoritaria.</p>
+<p>El modelo en PySpark presenta un rendimiento moderadamente bueno en la detección de clicks, superando al modelado en Scikit-learn en métricas como <code class="docutils literal notranslate"><span class="pre">Precisión</span></code>, <code class="docutils literal notranslate"><span class="pre">Recall</span></code>, <code class="docutils literal notranslate"><span class="pre">F1-score</span></code>, pero quedando atrás en <code class="docutils literal notranslate"><span class="pre">ROC-AUC</span></code></p>
 </section>
 <section id="interpretabilidad-con-lime">
 <h2><strong>Interpretabilidad con LIME</strong><a class="headerlink" href="#interpretabilidad-con-lime" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">lime</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">lime.lime_tabular</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">predictions_df</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+<span class="n">indexer_models</span>  <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">stages</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;labels&#39;</span><span class="p">)]</span>      
+<span class="n">encoder_models</span>  <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">stages</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;categorySizes&#39;</span><span class="p">)]</span> 
 
-<span class="n">features_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions_df</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
-<span class="n">y_pred_array</span>   <span class="o">=</span> <span class="n">predictions_df</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">y_test_array</span>   <span class="o">=</span> <span class="n">predictions_df</span><span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="k">for</span> <span class="n">idx_model</span><span class="p">,</span> <span class="n">enc_model</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indexer_models</span><span class="p">,</span> <span class="n">encoder_models</span><span class="p">):</span>
+    <span class="n">col_name</span>  <span class="o">=</span> <span class="n">idx_model</span><span class="o">.</span><span class="n">getInputCol</span><span class="p">()</span>          
+    <span class="n">labels</span>    <span class="o">=</span> <span class="n">idx_model</span><span class="o">.</span><span class="n">labels</span>                 
+    <span class="n">n_cats</span>    <span class="o">=</span> <span class="n">enc_model</span><span class="o">.</span><span class="n">categorySizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>   
 
-<span class="n">train_transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10000</span><span class="p">))</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
-<span class="n">X_train_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_transformed</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cats</span><span class="p">):</span>
+        <span class="n">cat_label</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;OTHER&#39;</span>
+        <span class="n">feature_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="n">cat_label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="n">mal_clasificados</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_pred_array</span> <span class="o">!=</span> <span class="n">y_test_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">idx</span> <span class="o">=</span> <span class="n">mal_clasificados</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Índice: </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valor real: </span><span class="si">{</span><span class="n">y_test_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valor predicho: </span><span class="si">{</span><span class="n">y_pred_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">predict_fn</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vectors</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="n">Vectors</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">row</span><span class="p">)}</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
-    <span class="n">spark_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
-    
-    <span class="n">mlp_stage</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">mlp_stage</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">spark_df</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Features reconstruidos: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">feature_names</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span> 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Índice: 108886
-Valor real: 0
-Valor predicho: 1.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Features reconstruidos: 479
+[&#39;banner_pos=0&#39;, &#39;banner_pos=1&#39;, &#39;banner_pos=7&#39;, &#39;banner_pos=2&#39;, &#39;banner_pos=4&#39;]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s1">_idx&#39;</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">vars_categoricas</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">lime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">lime.lime_tabular</span>
+
+<span class="n">N_SAMPLE</span> <span class="o">=</span> <span class="mi">2000</span> 
+
+<span class="n">test_sample</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;prediction&#39;</span><span class="p">,</span> <span class="s1">&#39;features&#39;</span><span class="p">)</span> \
+                         <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">N_SAMPLE</span><span class="p">)</span> \
+                         <span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+
+<span class="n">features_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="n">y_pred_array</span>   <span class="o">=</span> <span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_test_array</span>   <span class="o">=</span> <span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">train_sample</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span> \
+                         <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">)</span> \
+                         <span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">N_SAMPLE</span><span class="p">)</span> \
+                         <span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+<span class="n">X_train_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">train_sample</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">predict_fn</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vectors</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="n">Vectors</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">row</span><span class="p">)}</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+    <span class="n">spark_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">mlp_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">spark_df</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+<span class="n">mal_clasificados</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_pred_array</span> <span class="o">!=</span> <span class="n">y_test_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">mal_clasificados</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Índice: </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> | Real: </span><span class="si">{</span><span class="n">y_test_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Predicho: </span><span class="si">{</span><span class="n">y_pred_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">feature_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">idx_model</span><span class="p">,</span> <span class="n">enc_model</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indexer_models</span><span class="p">,</span> <span class="n">encoder_models</span><span class="p">):</span>
+    <span class="n">col_name</span> <span class="o">=</span> <span class="n">idx_model</span><span class="o">.</span><span class="n">getInputCol</span><span class="p">()</span>
+    <span class="n">labels</span>   <span class="o">=</span> <span class="n">idx_model</span><span class="o">.</span><span class="n">labels</span>
+    <span class="n">n_cats</span>   <span class="o">=</span> <span class="n">enc_model</span><span class="o">.</span><span class="n">categorySizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_cats</span><span class="p">):</span>
+        <span class="n">cat_label</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s1">&#39;cat_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">feature_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s1">=</span><span class="si">{</span><span class="n">cat_label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">n_vector</span> <span class="o">=</span> <span class="n">features_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">n_vector</span><span class="p">:</span>
+    <span class="n">feature_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;feature_</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vector: </span><span class="si">{</span><span class="n">n_vector</span><span class="si">}</span><span class="s2"> | Names: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span>
     <span class="n">training_data</span><span class="o">=</span><span class="n">X_train_array</span><span class="p">,</span>
@@ -1080,7 +1074,7 @@ Valor predicho: 1.0
 <span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
     <span class="n">data_row</span><span class="o">=</span><span class="n">features_array</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
     <span class="n">predict_fn</span><span class="o">=</span><span class="n">predict_fn</span><span class="p">,</span>
-    <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span>
+    <span class="n">num_features</span><span class="o">=</span><span class="mi">20</span>
 <span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">as_pyplot_figure</span><span class="p">()</span>
@@ -1091,19 +1085,20 @@ Valor predicho: 1.0
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/05c4783476d78c467110dc4b89582cce7fca01a34c5a036400c240bc75c9264f.png" src="_images/05c4783476d78c467110dc4b89582cce7fca01a34c5a036400c240bc75c9264f.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Índice: 1 | Real: 0 | Predicho: 1.0
+Vector: 496 | Names: 496
+</pre></div>
+</div>
+<img alt="_images/803a31e2cdd94fe1801276e3fdaf671d80ee4d6ba446f510fe5b51d3cb3006ca.png" src="_images/803a31e2cdd94fe1801276e3fdaf671d80ee4d6ba446f510fe5b51d3cb3006ca.png" />
 </div>
 </div>
 <section id="interpretacion">
 <h3><strong>Interpretación</strong><a class="headerlink" href="#interpretacion" title="Link to this heading">#</a></h3>
-<p>Las tres variables con mayor impacto en la predicción son:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">device_type_idx</span></code>: La categoría de tipo de dispositivo es la variable más influyente, con un impacto positivo de +0.030 cuando supera cierto umbral, indicando que algunos dispositivos tienen mayor propensión a clicks.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">banner_pos_idx</span></code>: La posición del banner publicitario ocupa el segundo lugar, con un efecto positivo de +0.025, sugiriendo que ciertas ubicaciones del anuncio favorecen la interacción.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">site_domain_idx</span></code>: El dominio del sitio web aporta +0.020 cuando se encuentra por debajo de un punto de corte específico, lo que indica que el modelo atribye la proprensión del click a sitios particulares.</p></li>
-</ul>
-<p>La mayoría de variables cuentan con impacto positivo (color verde) <code class="docutils literal notranslate"><span class="pre">device_type_idx</span></code> &gt; 1.00 (+0.030): tipos de dispositivo tienen mayor propensión a click, <code class="docutils literal notranslate"><span class="pre">banner_pos_idx</span></code> &gt; 0.00 (+0.025): posición del banner influye positivamente, <code class="docutils literal notranslate"><span class="pre">site_domain_idx</span></code> &lt;= 3.00 (+0.020): dominios específicos asociados a más clics, <code class="docutils literal notranslate"><span class="pre">C20_idx</span></code> &lt;= 0.00 (+0.015): variable anónima con efecto positivo.</p>
-<p>Son pocas las variables con impacto negativo (color rojo) <code class="docutils literal notranslate"><span class="pre">C17_idx</span></code> entre 16 y 58 (-0.010): rango específico de esta variable anónima reduce clicks, <code class="docutils literal notranslate"><span class="pre">device_model_idx</span></code> entre 15 y 88 (-0.012): modelos de dispositivo en este rango tienen menor tasa de clicks, <code class="docutils literal notranslate"><span class="pre">C21_idx</span></code> entre 3 y 6 (-0.003): variable anónima con efecto negativo leve.</p>
+<p>Para la interpretación con LIME, graficamos el top de 20 variables más influyentes en la predicción del modelo.</p>
+<p>Las variables de dominio <code class="docutils literal notranslate"><span class="pre">site_domain</span></code> y <code class="docutils literal notranslate"><span class="pre">app_domain</span></code>, son las más determinantes, concentrando los mayores impactos tanto positivos como negativos, lo que sugiere que el origen del tráfico es un factor determinante a la hora de predecir clicks.</p>
+<p>La variable <code class="docutils literal notranslate"><span class="pre">site_category</span></code> muestra efectos tanto positivos como negativos en la predicción de clicks, esto revela que la probabilidad de click presenta diferencias con relación a la temática del sitio web.</p>
+<p>Las variables anónimas <code class="docutils literal notranslate"><span class="pre">C20</span></code>, <code class="docutils literal notranslate"><span class="pre">C21</span></code> aparecen con impactos menores, esto implica que su contribución al modelo es más limitada o se manifiesta a través de interacciones más complejas.</p>
+<p>El modelo logra identificar patrones específicos donde ciertos dominios de paginas web como <code class="docutils literal notranslate"><span class="pre">7256c623</span></code>, presentan alta tasa de clicks, mientras que otros dominios como <code class="docutils literal notranslate"><span class="pre">c4342784</span></code>, <code class="docutils literal notranslate"><span class="pre">98572c79</span></code>, <code class="docutils literal notranslate"><span class="pre">510bd839</span></code> están asociados a una menor tasa, esta información resulta valiosa para la optimización de campañas centradas estos sitios. Por otro lado, dominios específicos de ciertas aplicaciones como <code class="docutils literal notranslate"><span class="pre">df32afa9</span></code>, <code class="docutils literal notranslate"><span class="pre">885c7f3f</span></code>, aumentan la probabilidad de no click. El único dominio de aplicación asociado a mayor número de clicks es <code class="docutils literal notranslate"><span class="pre">33da2e74</span></code>.</p>
 </section>
 </section>
 </section>
@@ -1121,48 +1116,48 @@ Valor predicho: 1.0
 <tbody>
 <tr class="row-even"><td><p>AUC</p></td>
 <td><p>0.7250</p></td>
-<td><p>0.5280</p></td>
+<td><p>0.7163</p></td>
 </tr>
 <tr class="row-odd"><td><p>Precisión</p></td>
 <td><p>0.60</p></td>
-<td><p>0.1420</p></td>
+<td><p>0.64</p></td>
 </tr>
 <tr class="row-even"><td><p>Recall</p></td>
 <td><p>0.06</p></td>
-<td><p>0.0000</p></td>
+<td><p>0.72</p></td>
 </tr>
 <tr class="row-odd"><td><p>F1-score</p></td>
 <td><p>0.10</p></td>
-<td><p>0.0000</p></td>
+<td><p>0.68</p></td>
 </tr>
 <tr class="row-even"><td><p>Método de encoding</p></td>
 <td><p>Target Encoding (con suavizado)</p></td>
-<td><p>StringIndexer + VectorAssembler</p></td>
+<td><p>StringIndexer + OneHotEncoder + VectorAssembler</p></td>
 </tr>
 <tr class="row-odd"><td><p>Tratamiento categorías raras</p></td>
 <td><p>Agrupación en OTHER (umbral 5000)</p></td>
-<td><p>Agrupación en OTHER (umbral 20000)</p></td>
+<td><p>Top 50 categorías más frecuentes</p></td>
 </tr>
 <tr class="row-even"><td><p>Tamaño de datos</p></td>
-<td><p>1M registros (subsample)</p></td>
-<td><p>40M registros (completo)</p></td>
+<td><p>1M registros (subsample 80-20)</p></td>
+<td><p>10M registros (undersampling 50-50)</p></td>
 </tr>
 <tr class="row-odd"><td><p>Tiempo de entrenamiento</p></td>
-<td><p>1,801.6 s (30 min)</p></td>
-<td><p>3,732.6 s (62 min)</p></td>
+<td><p>1,801.6s (30 min)</p></td>
+<td><p>8,035.7s (2 horas 10 minutos)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p><strong>Análisis de resultados:</strong></p>
 <ul class="simple">
-<li><p>Scikit-learn logró un rendimiento moderado en la detección de clics (recall 6%, precisión 60%), con un AUC aceptable de 0.725, gracias al uso de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> y la posibilidad de ajustar finamente hiperparámetros y estrategias de regularización.</p></li>
-<li><p>PySpark, a pesar de procesar el dataset completo de 40M registros, presentó un rendimiento prácticamente nulo para la clase minoritaria (recall 0%, precisión 14%), lo que indica que no logró aprender patrones predictivos para los clics.</p></li>
+<li><p><strong>Scikit-learn</strong> logró un rendimiento moderado en la detección de clics (recall 6%, precisión 60%), con un AUC aceptable de 0.725, gracias al uso de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> y la posibilidad de ajustar finamente hiperparámetros y estrategias de regularización. Sin embargo, el bajo recall indica dificultades para capturar la clase minoritaria.</p></li>
+<li><p><strong>PySpark</strong>, con una estrategia de undersampling (50-50) y un dataset de 10M registros, logró un rendimiento notablemente superior en la detección de clicks, con un recall de 72% y precisión de 64%, alcanzando un F1-score de 0.68 y un AUC de 0.7163, muy cercano al obtenido con Scikit-learn. Esto demuestra que el manejo del desbalance de clases fue clave para mejorar la capacidad predictiva sobre la clase minoritaria.</p></li>
 </ul>
 <p><strong>Ventajas y limitaciones de cada enfoque:</strong></p>
-<p>Scikit-learn ofrece mayor flexibilidad y variedad de técnicas para el preprocesamiento y encoding (<code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Enconding</span></code>), así como una amplia gama de métricas y métodos de optimización. Sin embargo, no escala a volúmenes de 40M registros de manera eficiente.</p>
-<p>PySpark destaca en la lectura, visualización y manipulación de datasets masivos. No obstante, sus opciones de encoding son limitadas (principalmente <code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> y <code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code>). Además, los modelos disponibles tienen menos parámetros ajustables en comparación con Scikit-learn, lo que dificulta replicar estrategias exitosas como <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>.</p>
-<p>Como conlusión final, para proyectos con datasets masivos, lo más recomendable es entrenar el modelo sobre un subsample representativo que permita aprovechar la riqueza de técnicas y configuraciones disponibles en entornos como Scikit-learn. Una vez validado el modelo, se puede implementar en PySpark para predicción en producción sobre el volumen completo de datos, combinando así lo mejor de ambos mundos: la potencia analítica de Scikit-learn y la escalabilidad de PySpark.</p>
+<p>Scikit-learn ofrece una mayor flexibilidad y variedad de técnicas para el preprocesamiento de variables, entre las cuales encontramos <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Encoding</span></code> y <code class="docutils literal notranslate"><span class="pre">Ordinal</span> <span class="pre">Encoder</span></code>, así como una amplia gama de hiperparámetros en los modelos integrados. Sin embargo, no escala a volúmenes de 40M registros de manera eficiente y su rendimiento se ve limitado sin un tratamiento adecuado del desbalance de clases.</p>
+<p>PySpark destaca en la lectura, visualización y manipulación de datasets masivos, así como en la capacidad de aplicar técnicas de muestreo como undersampling a gran escala. No obstante, sus opciones de encoding son más limitadas. Además, los modelos disponibles tienen menos parámetros ajustables en comparación con Scikit-learn, lo que puede dificultar replicar estrategias avanzadas como <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>.</p>
+<p>Como conclusión, para proyectos con datasets masivos y clases desbalanceadas, lo más recomendable es combinar lo mejor de ambos entornos, PySpark es ideal para el procesamiento y análisis de grandes volúmenes de datos, mientras que el modelado en Scikit-learn permite aprovechar su riqueza de técnicas de encoding, optimización y tuning de parámetros.</p>
 </section>
 </section>
 
@@ -1230,10 +1225,10 @@ Valor predicho: 1.0
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elimininamos-variables-identificadoras"><strong>Elimininamos variables identificadoras</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-tipo-de-variables"><strong>Separación tipo de variables</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-a-variables-categoricas"><strong>Conversión a variables categóricas</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agrupar-variables-de-alta-cardinalidad"><strong>Agrupar variables de alta cardinalidad</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reduccion-de-cardinalidad-top-50-categorias"><strong>Reducción de cardinalidad - Top 50 categorías</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separacion-conjunto-train-test"><strong>Separación conjunto Train - Test</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#undersampling-y-separacion-conjunto-train-test"><strong>Undersampling y Separación conjunto Train - Test</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-de-la-distribucion-de-clases"><strong>Validación de la distribución de clases</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-variables"><strong>Preprocesamiento variables</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline"><strong>Pipeline</strong></a></li>
