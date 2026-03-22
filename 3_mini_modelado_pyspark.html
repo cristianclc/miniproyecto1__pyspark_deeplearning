@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modelado Pyspark - Click-Through Rate &#8212; My sample book</title>
+    <title>4. Modelado Pyspark - Click-Through Rate &#8212; My sample book</title>
   
   
   
@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '3_mini_modelado_pyspark';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Modelado Scikit-Learn - Click-Through Rate" href="2_mini_modelado_sklearn.html" />
+    <link rel="prev" title="3. Modelado Scikit-Learn - Click-Through Rate" href="2_mini_modelado_sklearn.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -141,7 +141,7 @@
     
   
 
-<a class="navbar-brand logo" href="1_mini_proyecto.html">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -152,8 +152,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+    <img src="_static/Logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/Logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
   
   
 </a></div>
@@ -173,14 +173,16 @@
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
-                <a class="reference internal" href="1_mini_proyecto.html">
-                    Análisis Predictivo - Click-Through Rate
+                <a class="reference internal" href="intro.html">
+                    Predicción de Clics en Anuncios Móviles mediante Redes Neuronales Multicapa
                 </a>
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="2_mini_modelado_sklearn.html"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Modelado Pyspark - Click-Through Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduccion.html"><strong>1. Contexto del Proyecto</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_mini_proyecto.html"><strong>2. Análisis exploratorio</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_mini_modelado_sklearn.html"><strong>3. Modelado Scikit-Learn - Click-Through Rate</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>4. Modelado Pyspark - Click-Through Rate</strong></a></li>
 
 </ul>
 
@@ -367,7 +369,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Modelado Pyspark - Click-Through Rate</h1>
+    <h1>4. Modelado Pyspark - Click-Through Rate</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -377,7 +379,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Modelado Pyspark - Click-Through Rate</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>4. Modelado Pyspark - Click-Through Rate</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-librerias"><strong>Importación librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creacion-de-la-sesion-spark-y-carga-del-dataset"><strong>Creación de la Sesión Spark y Carga del Dataset</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encabezado-dataframe"><strong>Encabezado Dataframe</strong></a></li>
@@ -393,7 +395,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-de-la-distribucion-de-clases"><strong>Validación de la distribución de clases</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-variables"><strong>Preprocesamiento variables</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline"><strong>Pipeline</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-de-hiperparametros"><strong>Configuración de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-de-hiperparametros-grid-search"><strong>Configuración de hiperparámetros (Grid Search)</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-y-metricas-de-evaluacion"><strong>Entrenamiento y métricas de evaluación</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-con-lime"><strong>Interpretabilidad con LIME</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion"><strong>Interpretación</strong></a></li>
@@ -418,7 +420,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="modelado-pyspark-click-through-rate">
-<h1><strong>Modelado Pyspark - Click-Through Rate</strong><a class="headerlink" href="#modelado-pyspark-click-through-rate" title="Link to this heading">#</a></h1>
+<h1><strong>4. Modelado Pyspark - Click-Through Rate</strong><a class="headerlink" href="#modelado-pyspark-click-through-rate" title="Link to this heading">#</a></h1>
 <section id="importacion-librerias">
 <h2><strong>Importación librerías</strong><a class="headerlink" href="#importacion-librerias" title="Link to this heading">#</a></h2>
 <p>Se importan las librerías necesarias para el modelado, se importan herramientas para división de datos y  preprocesamiento.</p>
@@ -484,8 +486,8 @@ PYSPARK_PYTHON: c:\Users\CRISTIAN\miniconda3\envs\ml_venv\python.exe
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span> \
     <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;WSL Spark Demo&quot;</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">master</span><span class="p">(</span><span class="s2">&quot;local[*]&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.driver.memory&quot;</span><span class="p">,</span> <span class="s2">&quot;8g&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.executor.memory&quot;</span><span class="p">,</span> <span class="s2">&quot;8g&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.driver.memory&quot;</span><span class="p">,</span> <span class="s2">&quot;10g&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.executor.memory&quot;</span><span class="p">,</span> <span class="s2">&quot;10g&quot;</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -820,25 +822,40 @@ Distribución en test:
 </div>
 <p>El pipeline se entrena por medio de <code class="docutils literal notranslate"><span class="pre">fit</span></code> sobre el conjunto de entrenamiento y se aplica una transformación de prueba sobre una muestra para verificar el resultado. Se extrae el número de features generado, que corresponde a la cantidad total de columnas indexadas ingresadas al ensamblador.</p>
 </section>
-<section id="configuracion-de-hiperparametros">
-<h2><strong>Configuración de hiperparámetros</strong><a class="headerlink" href="#configuracion-de-hiperparametros" title="Link to this heading">#</a></h2>
-<p>Se define una configuración inicial para la red neuronal en PySpark tomando como referencia los mejores hiperparámetros obtenidos durante la optimización con Scikit-learn.</p>
+<section id="configuracion-de-hiperparametros-grid-search">
+<h2><strong>Configuración de hiperparámetros (Grid Search)</strong><a class="headerlink" href="#configuracion-de-hiperparametros-grid-search" title="Link to this heading">#</a></h2>
+<p>Se define una grilla de hiperparámetros para la red neuronal en PySpark. El grid search explorará todas las combinaciones de las siguientes opciones:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">layers</span></code>:</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">layers</span></code>: Define la arquitectura de la red (entrada → capa oculta → salida).</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">num_features</span></code>: capa de entrada con la dimensión del vector de características.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">100</span></code> hidden layer con 100 neuronas</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: output layer con 2 neuronas para clasificación binaria.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[num_features,</span> <span class="pre">10,</span> <span class="pre">2]</span></code>: capa oculta con <strong>10</strong> neuronas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[num_features,</span> <span class="pre">50,</span> <span class="pre">2]</span></code>: capa oculta con <strong>50</strong> neuronas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">[num_features,</span> <span class="pre">100,</span> <span class="pre">2]</span></code>: capa oculta con <strong>100</strong> neuronas.</p></li>
 </ul>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">stepSize</span></code>: Tasa de aprendizaje inicial de 0.01. Cabe aclarar que en Scikit-learn el parámetro <code class="docutils literal notranslate"><span class="pre">alpha</span></code> corresponde a regularización, no a la tasa de aprendizaje, por lo que este parámetro no es equivalente (PySpark no cuenta con parámetro de regularización).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">maxIter</span></code>: Número máximo de iteraciones fijado en 100, manteniendo el mismo valor que en la mejor configuración de Scikit-learn.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stepSize</span></code>: Tasa de aprendizaje — se evalua el valor de <strong>0.01</strong>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxIter</span></code>: Número máximo de iteraciones fijado en <strong>100</strong>.</p></li>
 </ul>
+<p>Esto produce un total de <strong>3 combinaciones</strong>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_features</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_features</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span>  <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
     <span class="p">{</span><span class="s1">&#39;layers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_features</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;stepSize&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="s1">&#39;maxIter&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
 <span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Grid search: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span><span class="si">}</span><span class="s1"> combinaciones de hiperparámetros&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  layers=</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, stepSize=</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, maxIter=</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Grid search: 3 combinaciones de hiperparámetros
+  layers=[496, 10, 2], stepSize=0.01, maxIter=100
+  layers=[496, 50, 2], stepSize=0.01, maxIter=100
+  layers=[496, 100, 2], stepSize=0.01, maxIter=100
 </pre></div>
 </div>
 </div>
@@ -848,7 +865,8 @@ Distribución en test:
 <h2><strong>Entrenamiento y métricas de evaluación</strong><a class="headerlink" href="#entrenamiento-y-metricas-de-evaluacion" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">MulticlassClassificationEvaluator</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.ml.evaluation</span><span class="w"> </span><span class="kn">import</span> <span class="n">MulticlassClassificationEvaluator</span>
 
 <span class="n">evaluator_auc</span> <span class="o">=</span> <span class="n">BinaryClassificationEvaluator</span><span class="p">(</span>
     <span class="n">labelCol</span><span class="o">=</span><span class="s1">&#39;click&#39;</span><span class="p">,</span>
@@ -864,6 +882,9 @@ Distribución en test:
 
 <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
+<span class="n">train_transformed</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+<span class="n">test_transformed</span>  <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+
 <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Entrenando: </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -876,9 +897,6 @@ Distribución en test:
         <span class="n">featuresCol</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="mi">42</span>
     <span class="p">)</span>
-
-    <span class="n">train_transformed</span> <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
-    <span class="n">test_transformed</span>  <span class="o">=</span> <span class="n">prep_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
 
     <span class="n">start_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
     <span class="n">mlp_model</span>   <span class="o">=</span> <span class="n">mlp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_transformed</span><span class="p">)</span>
@@ -894,7 +912,7 @@ Distribución en test:
     <span class="n">f1</span>        <span class="o">=</span> <span class="n">evaluator_f1</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="p">{</span><span class="n">evaluator_f1</span><span class="o">.</span><span class="n">metricLabel</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
 
     <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;layers&#39;</span>    <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;layers&#39;</span>    <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">]),</span>
         <span class="s1">&#39;stepSize&#39;</span>  <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">],</span>
         <span class="s1">&#39;maxIter&#39;</span>   <span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">],</span>
         <span class="s1">&#39;auc&#39;</span>       <span class="p">:</span> <span class="n">auc</span><span class="p">,</span>
@@ -909,20 +927,76 @@ Distribución en test:
           <span class="sa">f</span><span class="s1">&#39;Train: </span><span class="si">{</span><span class="n">train_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">s | Pred: </span><span class="si">{</span><span class="n">pred_time</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">s&#39;</span><span class="p">)</span>
 
     <span class="n">predictions</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;prediction&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results_df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;auc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
+<span class="n">best</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Mejor configuración (mayor AUC):&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   layers=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;layers&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">, stepSize=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;stepSize&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">, maxIter=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;maxIter&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;   AUC=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;auc&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | Precision=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | Recall=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;recall&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> | F1=</span><span class="si">{</span><span class="n">best</span><span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">best_config</span> <span class="o">=</span> <span class="n">configs</span><span class="p">[</span><span class="n">results_df</span><span class="p">[</span><span class="s1">&#39;auc&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()]</span>
+
+<span class="n">best_mlp</span> <span class="o">=</span> <span class="n">MultilayerPerceptronClassifier</span><span class="p">(</span>
+    <span class="n">layers</span>    <span class="o">=</span> <span class="n">best_config</span><span class="p">[</span><span class="s1">&#39;layers&#39;</span><span class="p">],</span>
+    <span class="n">stepSize</span>  <span class="o">=</span> <span class="n">best_config</span><span class="p">[</span><span class="s1">&#39;stepSize&#39;</span><span class="p">],</span>
+    <span class="n">maxIter</span>   <span class="o">=</span> <span class="n">best_config</span><span class="p">[</span><span class="s1">&#39;maxIter&#39;</span><span class="p">],</span>
+    <span class="n">solver</span>    <span class="o">=</span> <span class="s1">&#39;l-bfgs&#39;</span><span class="p">,</span>
+    <span class="n">labelCol</span>  <span class="o">=</span> <span class="s1">&#39;click&#39;</span><span class="p">,</span>
+    <span class="n">featuresCol</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span><span class="p">,</span>
+    <span class="n">seed</span>      <span class="o">=</span> <span class="mi">42</span>
+<span class="p">)</span>
+<span class="n">best_model</span>       <span class="o">=</span> <span class="n">best_mlp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_transformed</span><span class="p">)</span>
+<span class="n">best_predictions</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">test_transformed</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenando: {&#39;layers&#39;: [496, 100, 2], &#39;stepSize&#39;: 0.01, &#39;maxIter&#39;: 100}
-AUC: 0.7163 | P: 0.6411 | R: 0.7297 | F1: 0.6829 | Train: 8035.7s | Pred: 0.1s
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Entrenando: {&#39;layers&#39;: [496, 10, 2], &#39;stepSize&#39;: 0.01, &#39;maxIter&#39;: 100}
+AUC: 0.7179 | P: 0.6489 | R: 0.7264 | F1: 0.6854 | Train: 1599.0s | Pred: 0.1s
 +-----+----------+------+
 |click|prediction| count|
 +-----+----------+------+
-|    1|       0.0|270706|
-|    0|       0.0|592982|
-|    1|       1.0|729361|
-|    0|       1.0|406808|
+|    1|       0.0|273747|
+|    0|       0.0|607794|
+|    1|       1.0|726644|
+|    0|       1.0|393175|
 +-----+----------+------+
+
+
+Entrenando: {&#39;layers&#39;: [496, 50, 2], &#39;stepSize&#39;: 0.01, &#39;maxIter&#39;: 100}
+AUC: 0.7190 | P: 0.6439 | R: 0.7235 | F1: 0.6814 | Train: 5807.6s | Pred: 0.1s
++-----+----------+------+
+|click|prediction| count|
++-----+----------+------+
+|    1|       0.0|276651|
+|    0|       0.0|600755|
+|    1|       1.0|723740|
+|    0|       1.0|400214|
++-----+----------+------+
+
+
+Entrenando: {&#39;layers&#39;: [496, 100, 2], &#39;stepSize&#39;: 0.01, &#39;maxIter&#39;: 100}
+AUC: 0.7162 | P: 0.6407 | R: 0.7251 | F1: 0.6803 | Train: 7308.6s | Pred: 0.1s
++-----+----------+------+
+|click|prediction| count|
++-----+----------+------+
+|    1|       0.0|274964|
+|    0|       0.0|594093|
+|    1|       1.0|725427|
+|    0|       1.0|406876|
++-----+----------+------+
+
+       layers  stepSize  maxIter      auc  precision   recall       f1  train_time  pred_time
+ [496, 10, 2]      0.01      100 0.717871   0.648894 0.726360 0.685445 1599.014316   0.072641
+ [496, 50, 2]      0.01      100 0.719028   0.643923 0.723457 0.681377 5807.604824   0.076085
+[496, 100, 2]      0.01      100 0.716161   0.640665 0.725143 0.680292 7308.608614   0.066243
+
+ Mejor configuración (mayor AUC):
+   layers=[496, 50, 2], stepSize=0.01, maxIter=100
+   AUC=0.7190 | Precision=0.6439 | Recall=0.7235 | F1=0.6814
 </pre></div>
 </div>
 </div>
@@ -931,7 +1005,7 @@ AUC: 0.7163 | P: 0.6411 | R: 0.7297 | F1: 0.6829 | Train: 8035.7s | Pred: 0.1s
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">RocCurveDisplay</span><span class="p">,</span> <span class="n">ConfusionMatrixDisplay</span>
 
-<span class="n">results_df</span> <span class="o">=</span> <span class="n">predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+<span class="n">results_df</span> <span class="o">=</span> <span class="n">best_predictions</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
     <span class="s1">&#39;click&#39;</span><span class="p">,</span>
     <span class="s1">&#39;prediction&#39;</span><span class="p">,</span>
     <span class="s1">&#39;probability&#39;</span>
@@ -965,22 +1039,22 @@ AUC: 0.7163 | P: 0.6411 | R: 0.7297 | F1: 0.6829 | Train: 8035.7s | Pred: 0.1s
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4ffea19e401fce855953b317205593bab12b9c1219a96ba982632da7d272ba95.png" src="_images/4ffea19e401fce855953b317205593bab12b9c1219a96ba982632da7d272ba95.png" />
+<img alt="_images/4a548704f1276c9ce5c5af3fc5679af14620c8d2fe80140bede070fa4f870881.png" src="_images/4a548704f1276c9ce5c5af3fc5679af14620c8d2fe80140bede070fa4f870881.png" />
 </div>
 </div>
 <p><strong>Métricas de rendimiento</strong>:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">AUC</span></code>: 0.7163, indica una capacidad discriminativa moderada, superior a un clasificador aleatorio (0.5), pero con margen de mejora.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Precisión</span></code>: 0.6411, de cada 100 predicciones positivas, aproximadamente 64 son realmente clics.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Recall</span></code>: 0.7297, el modelo logra detectar cerca del 73% de los clics reales, mostrando una buena capacidad para identificar la clase positiva.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">F1-score</span></code>: 0.6829,  refleja un balance aceptable entre precisión y recall, aunque aún puede optimizarse.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AUC</span></code>: 0.7190, indica una capacidad discriminativa moderada, superior a un clasificador aleatorio (0.5), pero con margen de mejora.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Precisión</span></code>: 0.6439, de cada 100 predicciones positivas, aproximadamente 64 son realmente clics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Recall</span></code>: 0.7235, el modelo logra detectar cerca del 73% de los clics reales, mostrando una buena capacidad para identificar la clase positiva.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">F1-score</span></code>: 0.6814,  refleja un balance aceptable entre precisión y recall, aunque aún puede optimizarse.</p></li>
 </ul>
 <p><strong>Matriz de confusión:</strong></p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">negativos</span></code>: 592,156</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">positivos</span></code>: 407,632</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">negativos</span></code>: 270,506</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">positivos</span></code>: 729,475</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">negativos</span></code>: 589,944</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">positivos</span></code>: 411,025</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Falsos</span> <span class="pre">negativos</span></code>: 265,008</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Verdaderos</span> <span class="pre">positivos</span></code>: 735,383</p></li>
 </ul>
 <p>El modelo en PySpark presenta un rendimiento moderadamente bueno en la detección de clicks, superando al modelado en Scikit-learn en métricas como <code class="docutils literal notranslate"><span class="pre">Precisión</span></code>, <code class="docutils literal notranslate"><span class="pre">Recall</span></code>, <code class="docutils literal notranslate"><span class="pre">F1-score</span></code>, pero quedando atrás en <code class="docutils literal notranslate"><span class="pre">ROC-AUC</span></code></p>
 </section>
@@ -1089,7 +1163,7 @@ AUC: 0.7163 | P: 0.6411 | R: 0.7297 | F1: 0.6829 | Train: 8035.7s | Pred: 0.1s
 Vector: 496 | Names: 496
 </pre></div>
 </div>
-<img alt="_images/803a31e2cdd94fe1801276e3fdaf671d80ee4d6ba446f510fe5b51d3cb3006ca.png" src="_images/803a31e2cdd94fe1801276e3fdaf671d80ee4d6ba446f510fe5b51d3cb3006ca.png" />
+<img alt="_images/411908b16d67f595bdb28ce5f99302e1ecf2e5a0dc6ee20734c04a1f25a57b32.png" src="_images/411908b16d67f595bdb28ce5f99302e1ecf2e5a0dc6ee20734c04a1f25a57b32.png" />
 </div>
 </div>
 <section id="interpretacion">
@@ -1098,7 +1172,7 @@ Vector: 496 | Names: 496
 <p>Las variables de dominio <code class="docutils literal notranslate"><span class="pre">site_domain</span></code> y <code class="docutils literal notranslate"><span class="pre">app_domain</span></code>, son las más determinantes, concentrando los mayores impactos tanto positivos como negativos, lo que sugiere que el origen del tráfico es un factor determinante a la hora de predecir clicks.</p>
 <p>La variable <code class="docutils literal notranslate"><span class="pre">site_category</span></code> muestra efectos tanto positivos como negativos en la predicción de clicks, esto revela que la probabilidad de click presenta diferencias con relación a la temática del sitio web.</p>
 <p>Las variables anónimas <code class="docutils literal notranslate"><span class="pre">C20</span></code>, <code class="docutils literal notranslate"><span class="pre">C21</span></code> aparecen con impactos menores, esto implica que su contribución al modelo es más limitada o se manifiesta a través de interacciones más complejas.</p>
-<p>El modelo logra identificar patrones específicos donde ciertos dominios de paginas web como <code class="docutils literal notranslate"><span class="pre">7256c623</span></code>, presentan alta tasa de clicks, mientras que otros dominios como <code class="docutils literal notranslate"><span class="pre">c4342784</span></code>, <code class="docutils literal notranslate"><span class="pre">98572c79</span></code>, <code class="docutils literal notranslate"><span class="pre">510bd839</span></code> están asociados a una menor tasa, esta información resulta valiosa para la optimización de campañas centradas estos sitios. Por otro lado, dominios específicos de ciertas aplicaciones como <code class="docutils literal notranslate"><span class="pre">df32afa9</span></code>, <code class="docutils literal notranslate"><span class="pre">885c7f3f</span></code>, aumentan la probabilidad de no click. El único dominio de aplicación asociado a mayor número de clicks es <code class="docutils literal notranslate"><span class="pre">33da2e74</span></code>.</p>
+<p>El modelo logra identificar patrones específicos donde ciertos dominios de paginas web como <code class="docutils literal notranslate"><span class="pre">7256c623</span></code>, presentan alta tasa de clicks, mientras que otros dominios como <code class="docutils literal notranslate"><span class="pre">c4342784</span></code>, <code class="docutils literal notranslate"><span class="pre">98572c79</span></code>, <code class="docutils literal notranslate"><span class="pre">510bd839</span></code> están asociados usualmente a flata de clicks, esta información resulta valiosa para la optimización de campañas centradas estos sitios. Por otro lado, dominios específicos de ciertas aplicaciones como <code class="docutils literal notranslate"><span class="pre">df32afa9</span></code>, <code class="docutils literal notranslate"><span class="pre">885c7f3f</span></code>, aumentan la probabilidad de no click. El único dominio de aplicación asociado a mayor número de clicks es <code class="docutils literal notranslate"><span class="pre">33da2e74</span></code>.</p>
 </section>
 </section>
 </section>
@@ -1116,7 +1190,7 @@ Vector: 496 | Names: 496
 <tbody>
 <tr class="row-even"><td><p>AUC</p></td>
 <td><p>0.7250</p></td>
-<td><p>0.7163</p></td>
+<td><p>0.7190</p></td>
 </tr>
 <tr class="row-odd"><td><p>Precisión</p></td>
 <td><p>0.60</p></td>
@@ -1144,7 +1218,7 @@ Vector: 496 | Names: 496
 </tr>
 <tr class="row-odd"><td><p>Tiempo de entrenamiento</p></td>
 <td><p>1,801.6s (30 min)</p></td>
-<td><p>8,035.7s (2 horas 10 minutos)</p></td>
+<td><p>5,807.6s (1 hora 36 minutos)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1152,7 +1226,7 @@ Vector: 496 | Names: 496
 <p><strong>Análisis de resultados:</strong></p>
 <ul class="simple">
 <li><p><strong>Scikit-learn</strong> logró un rendimiento moderado en la detección de clics (recall 6%, precisión 60%), con un AUC aceptable de 0.725, gracias al uso de <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code> y la posibilidad de ajustar finamente hiperparámetros y estrategias de regularización. Sin embargo, el bajo recall indica dificultades para capturar la clase minoritaria.</p></li>
-<li><p><strong>PySpark</strong>, con una estrategia de undersampling (50-50) y un dataset de 10M registros, logró un rendimiento notablemente superior en la detección de clicks, con un recall de 72% y precisión de 64%, alcanzando un F1-score de 0.68 y un AUC de 0.7163, muy cercano al obtenido con Scikit-learn. Esto demuestra que el manejo del desbalance de clases fue clave para mejorar la capacidad predictiva sobre la clase minoritaria.</p></li>
+<li><p><strong>PySpark</strong>, con una estrategia de undersampling (50-50) y un dataset de 10M registros, logró un rendimiento notablemente superior en la detección de clicks, con un recall de 72% y precisión de 64%, alcanzando un F1-score de 0.68 y un AUC de 0.7190, muy cercano al obtenido con Scikit-learn. Esto demuestra que el manejo del desbalance de clases fue clave para mejorar la capacidad predictiva sobre la clase minoritaria.</p></li>
 </ul>
 <p><strong>Ventajas y limitaciones de cada enfoque:</strong></p>
 <p>Scikit-learn ofrece una mayor flexibilidad y variedad de técnicas para el preprocesamiento de variables, entre las cuales encontramos <code class="docutils literal notranslate"><span class="pre">Target</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">One</span> <span class="pre">Hot</span> <span class="pre">Encoding</span></code>, <code class="docutils literal notranslate"><span class="pre">Label</span> <span class="pre">Encoding</span></code> y <code class="docutils literal notranslate"><span class="pre">Ordinal</span> <span class="pre">Encoder</span></code>, así como una amplia gama de hiperparámetros en los modelos integrados. Sin embargo, no escala a volúmenes de 40M registros de manera eficiente y su rendimiento se ve limitado sin un tratamiento adecuado del desbalance de clases.</p>
@@ -1197,7 +1271,7 @@ Vector: 496 | Names: 496
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></p>
+        <p class="prev-next-title"><strong>3. Modelado Scikit-Learn - Click-Through Rate</strong></p>
       </div>
     </a>
 </div>
@@ -1216,7 +1290,7 @@ Vector: 496 | Names: 496
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Modelado Pyspark - Click-Through Rate</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>4. Modelado Pyspark - Click-Through Rate</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-librerias"><strong>Importación librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creacion-de-la-sesion-spark-y-carga-del-dataset"><strong>Creación de la Sesión Spark y Carga del Dataset</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#encabezado-dataframe"><strong>Encabezado Dataframe</strong></a></li>
@@ -1232,7 +1306,7 @@ Vector: 496 | Names: 496
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validacion-de-la-distribucion-de-clases"><strong>Validación de la distribución de clases</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocesamiento-variables"><strong>Preprocesamiento variables</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline"><strong>Pipeline</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-de-hiperparametros"><strong>Configuración de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuracion-de-hiperparametros-grid-search"><strong>Configuración de hiperparámetros (Grid Search)</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-y-metricas-de-evaluacion"><strong>Entrenamiento y métricas de evaluación</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-con-lime"><strong>Interpretabilidad con LIME</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion"><strong>Interpretación</strong></a></li>

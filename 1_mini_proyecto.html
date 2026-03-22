@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Análisis Predictivo - Click-Through Rate &#8212; My sample book</title>
+    <title>2. Análisis exploratorio &#8212; My sample book</title>
   
   
   
@@ -60,7 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '1_mini_proyecto';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Modelado Scikit-Learn - Click-Through Rate" href="2_mini_modelado_sklearn.html" />
+    <link rel="next" title="3. Modelado Scikit-Learn - Click-Through Rate" href="2_mini_modelado_sklearn.html" />
+    <link rel="prev" title="1. Contexto del Proyecto" href="introduccion.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -123,8 +124,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -143,7 +142,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -154,8 +153,8 @@
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+    <img src="_static/Logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/Logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
   
   
 </a></div>
@@ -174,15 +173,17 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
-                    Análisis Predictivo - Click-Through Rate
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Predicción de Clics en Anuncios Móviles mediante Redes Neuronales Multicapa
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="2_mini_modelado_sklearn.html"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></a></li>
-<li class="toctree-l1"><a class="reference internal" href="3_mini_modelado_pyspark.html"><strong>Modelado Pyspark - Click-Through Rate</strong></a></li>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduccion.html"><strong>1. Contexto del Proyecto</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>2. Análisis exploratorio</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_mini_modelado_sklearn.html"><strong>3. Modelado Scikit-Learn - Click-Through Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_mini_modelado_pyspark.html"><strong>4. Modelado Pyspark - Click-Through Rate</strong></a></li>
 
 </ul>
 
@@ -369,7 +370,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Análisis Predictivo - Click-Through Rate</h1>
+    <h1>2. Análisis exploratorio</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -379,17 +380,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-del-proyecto"><strong>Contexto del Proyecto</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-de-datos-click-through-rate-prediction"><strong>Base de Datos: Click-Through Rate Prediction</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#origen"><strong>Origen</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas"><strong>Características</strong></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-analizadas"><strong>Variables analizadas</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo"><strong>Variable Objetivo</strong></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias-analisis-exploratorio"><strong>Importación de Librerías - Análisis exploratorio</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias"><strong>Importación de Librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-de-datos"><strong>Lectura de Datos</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cambio-nombre-de-columnas"><strong>Cambio nombre de columnas</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-dataframe"><strong>Tamaño Dataframe</strong></a></li>
@@ -434,57 +425,10 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="analisis-predictivo-click-through-rate">
-<h1><strong>Análisis Predictivo - Click-Through Rate</strong><a class="headerlink" href="#analisis-predictivo-click-through-rate" title="Link to this heading">#</a></h1>
-<section id="contexto-del-proyecto">
-<h2><strong>Contexto del Proyecto</strong><a class="headerlink" href="#contexto-del-proyecto" title="Link to this heading">#</a></h2>
-<p>El objetivo del proyecto es el de construir un modelo de clasificación supervisada usando MLP - (MultiLayer Perceptron) con el fin de predecir si un usuario hará clic en un anuncio móvil</p>
-</section>
-<section id="base-de-datos-click-through-rate-prediction">
-<h2><strong>Base de Datos: Click-Through Rate Prediction</strong><a class="headerlink" href="#base-de-datos-click-through-rate-prediction" title="Link to this heading">#</a></h2>
-<section id="origen">
-<h3><strong>Origen</strong><a class="headerlink" href="#origen" title="Link to this heading">#</a></h3>
-<p>El Dataset utilizado en este proyecto corresponde a <strong>Click-Through Rate Prediction</strong>, usado inicialmente en competencias de Kaggle con el fin de evaluar algoritmos para la predicción de clicks en publicidad digital.</p>
-</section>
-<section id="caracteristicas">
-<h3><strong>Características</strong><a class="headerlink" href="#caracteristicas" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><strong>Volumen:</strong> 40,428,967 registros de usuarios.</p></li>
-<li><p><strong>Variables:</strong> 24 variables.</p></li>
-<li><p><strong>Período:</strong> 11 días de información.</p></li>
-<li><p><strong>Completitud:</strong> No contamos con valores faltantes en el Dataset.</p></li>
-</ul>
-</section>
-</section>
-<section id="variables-analizadas">
-<h2><strong>Variables analizadas</strong><a class="headerlink" href="#variables-analizadas" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code>: Identificador único de cada impresión de anuncio. Cada fila del dataset representa una ocasión en la que un anuncio fue mostrado a un usuario.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">hour</span></code>: Marca temporal del anuncio (formato: YYMMDDHH)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">banner_pos</span></code>: Posición del banner en la página web.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">site_id</span></code>: Identificador único del sitio web donde se mostró el anuncio.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">site_domain</span></code>: Dominio del sitio web donde se muestra el anuncio.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">site_category</span></code>: Categoría temática del sitio web.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">app_id</span></code>: Identificador único de la aplicación móvil donde se mostró el anuncio.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">app_domain</span></code>: Dominio asociado a la aplicación.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">app_category</span></code>: Categoría de la aplicación.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">device_id</span></code>: Identificador único del dispositivo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">device_ip</span></code>: Dirección IP del dispositivo que vio el anuncio.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">device_model</span></code>: Modelo del dispositivo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">device_type</span></code>: Tipo de dispositivo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">device_conn_type</span></code>: Tipo de conexión de red del dispositivo.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">C1</span></code>: variable categórica anonimizada</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">C14–C21</span></code>: variables categóricas anónimas</p></li>
-</ul>
-<section id="variable-objetivo">
-<h3><strong>Variable Objetivo</strong><a class="headerlink" href="#variable-objetivo" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">click</span></code>:  indicador de si hubo clic</p></li>
-</ul>
-</section>
-</section>
-<section id="importacion-de-librerias-analisis-exploratorio">
-<h2><strong>Importación de Librerías - Análisis exploratorio</strong><a class="headerlink" href="#importacion-de-librerias-analisis-exploratorio" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-exploratorio">
+<h1><strong>2. Análisis exploratorio</strong><a class="headerlink" href="#analisis-exploratorio" title="Link to this heading">#</a></h1>
+<section id="importacion-de-librerias">
+<h2><strong>Importación de Librerías</strong><a class="headerlink" href="#importacion-de-librerias" title="Link to this heading">#</a></h2>
 <p>Se importan las librerías necesarias para el análisis que abarca la carga de datos, visualización y la transformación de datos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1917,8 +1861,6 @@ Name: click, dtype: float64
 </ul>
 </section>
 </section>
-<div class="toctree-wrapper compound">
-</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1951,12 +1893,21 @@ Name: click, dtype: float64
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="introduccion.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>1. Contexto del Proyecto</strong></p>
+      </div>
+    </a>
     <a class="right-next"
        href="2_mini_modelado_sklearn.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><strong>Modelado Scikit-Learn - Click-Through Rate</strong></p>
+        <p class="prev-next-title"><strong>3. Modelado Scikit-Learn - Click-Through Rate</strong></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1976,17 +1927,7 @@ Name: click, dtype: float64
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contexto-del-proyecto"><strong>Contexto del Proyecto</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-de-datos-click-through-rate-prediction"><strong>Base de Datos: Click-Through Rate Prediction</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#origen"><strong>Origen</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caracteristicas"><strong>Características</strong></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-analizadas"><strong>Variables analizadas</strong></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-objetivo"><strong>Variable Objetivo</strong></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias-analisis-exploratorio"><strong>Importación de Librerías - Análisis exploratorio</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importacion-de-librerias"><strong>Importación de Librerías</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lectura-de-datos"><strong>Lectura de Datos</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cambio-nombre-de-columnas"><strong>Cambio nombre de columnas</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tamano-dataframe"><strong>Tamaño Dataframe</strong></a></li>
